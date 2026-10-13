@@ -14,6 +14,7 @@ import { workspaceRoutes } from './routes/workspace.routes';
 import { contactRoutes } from './routes/contact.routes';
 import { conversationRoutes } from './routes/conversation.routes';
 import { whatsappRoutes } from './routes/whatsapp.routes';
+import { aiRoutes } from './routes/ai.routes';
 import { healthRoutes } from './routes/health.routes';
 
 export async function createServer() {
@@ -90,6 +91,7 @@ export async function createServer() {
   await server.register(contactRoutes, { prefix: '/api/v1/contacts' });
   await server.register(conversationRoutes, { prefix: '/api/v1/conversations' });
   await server.register(whatsappRoutes, { prefix: '/api/v1/whatsapp' });
+  await server.register(aiRoutes, { prefix: '/api/v1/ai' });
 
   return server;
 }

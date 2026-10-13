@@ -2,6 +2,7 @@ import 'dotenv/config';
 import { createServer } from './server';
 import { logger } from '@whatsapp-automation/observability';
 import { prisma } from '@whatsapp-automation/database';
+import { aiConversationService } from './services/ai-conversation.service';
 
 const PORT = parseInt(process.env.API_PORT || '4000', 10);
 const HOST = process.env.HOST || '0.0.0.0';
@@ -11,6 +12,10 @@ async function start() {
     // Test database connection
     await prisma.$connect();
     logger.info('Database connected successfully');
+
+    // Initialize AI conversation service
+    await aiConversationService.initialize();
+    logger.info('AI conversation service initialized');
 
     // Create and start server
     const server = await createServer();

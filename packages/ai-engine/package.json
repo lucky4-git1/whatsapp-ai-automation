@@ -1,0 +1,29 @@
+{
+  "name": "@whatsapp-ai/ai-engine",
+  "version": "1.0.0",
+  "description": "AI conversation engine with multi-provider support and knowledge base",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "clean": "rimraf dist"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.20.0",
+    "openai": "^4.28.0",
+    "@pinecone-database/pinecone": "^2.0.1",
+    "langchain": "^0.1.25",
+    "@langchain/openai": "^0.0.19",
+    "@langchain/anthropic": "^0.0.5",
+    "@langchain/community": "^0.0.34",
+    "uuid": "^9.0.1",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.19",
+    "@types/uuid": "^9.0.7",
+    "typescript": "^5.3.3",
+    "rimraf": "^5.0.5"
+  }
+}
