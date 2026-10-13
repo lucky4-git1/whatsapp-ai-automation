@@ -1,0 +1,32 @@
+{
+  "name": "whatsapp-ai-automation",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Production-grade multi-tenant WhatsApp AI automation platform",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "test": "turbo run test",
+    "lint": "turbo run lint",
+    "type-check": "turbo run type-check",
+    "db:migrate": "cd packages/database && npm run migrate",
+    "db:generate": "cd packages/database && npm run generate",
+    "db:studio": "cd packages/database && npm run studio",
+    "clean": "turbo run clean && rm -rf node_modules"
+  },
+  "devDependencies": {
+    "turbo": "^2.0.0",
+    "typescript": "^5.5.0",
+    "@types/node": "^20.14.0",
+    "prettier": "^3.3.0",
+    "eslint": "^8.57.0"
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "npm": ">=10.0.0"
+  }
+}
