@@ -1,0 +1,28 @@
+{
+  "name": "@whatsapp-automation/worker",
+  "version": "1.0.0",
+  "private": true,
+  "main": "dist/index.js",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@whatsapp-automation/database": "*",
+    "@whatsapp-automation/shared": "*",
+    "@whatsapp-automation/observability": "*",
+    "@whatsapp-automation/whatsapp-provider": "*",
+    "@whatsapp-ai/ai-engine": "*",
+    "bullmq": "^5.4.0",
+    "ioredis": "^5.4.0",
+    "dotenv": "^16.4.5",
+    "date-fns": "^3.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.0",
+    "tsx": "^4.15.0",
+    "typescript": "^5.5.0"
+  }
+}
