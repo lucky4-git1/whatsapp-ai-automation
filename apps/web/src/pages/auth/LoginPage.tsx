@@ -92,6 +92,41 @@ export default function LoginPage() {
             Sign up
           </Link>
         </div>
+
+        <div className="mt-4 pt-3 border-top text-center">
+          <button
+            type="button"
+            className="btn btn-outline-success btn-sm w-100 py-2 fw-medium"
+            onClick={() => {
+              const demoUser = {
+                id: 'demo-user-123',
+                email: 'demo@whatsapp-ai.com',
+                firstName: 'Alex',
+                lastName: 'Morgan',
+                emailVerified: true,
+                memberships: [
+                  {
+                    organizationId: 'demo-org-1',
+                    organizationName: 'Acme Enterprise',
+                    organizationSlug: 'acme-enterprise',
+                    workspaceId: 'demo-workspace-1',
+                    workspaceName: 'Acme Global Support',
+                    role: 'ADMIN',
+                  },
+                ],
+              };
+              localStorage.setItem('token', 'demo-token');
+              localStorage.setItem('user', JSON.stringify(demoUser));
+              localStorage.setItem('workspaceId', 'demo-workspace-1');
+              useAuthStore.setState({ user: demoUser, token: 'demo-token', isLoading: false });
+              toast.success('Welcome to Presentation Demo Workspace!');
+              navigate('/');
+            }}
+          >
+            <i className="fas fa-play-circle me-2"></i>
+            Quick Launch Demo (Presentation Mode)
+          </button>
+        </div>
       </div>
     </div>
   );

@@ -28,7 +28,7 @@ export default function InboxPage() {
       <div className="card">
         <div className="row g-0" style={{ height: 'calc(100vh - 250px)' }}>
           {/* Conversation List */}
-          <div className="col-md-4 border-end">
+          <div className={`col-md-4 border-end ${selectedConversationId ? 'd-none d-md-block' : 'col-12'}`}>
             <div className="p-3 border-bottom">
               <div className="input-group">
                 <span className="input-group-text bg-white">
@@ -99,7 +99,7 @@ export default function InboxPage() {
           </div>
 
           {/* Conversation Detail */}
-          <div className="col-md-8">
+          <div className={`col-md-8 ${!selectedConversationId ? 'd-none d-md-block' : 'col-12'}`}>
             {selectedConversationId ? (
               <ConversationDetail conversationId={selectedConversationId} />
             ) : (

@@ -7,6 +7,7 @@ export default function DashboardLayout() {
   const navigate = useNavigate();
   const { user, logout } = useAuthStore();
   const [showUserMenu, setShowUserMenu] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const isActive = (path: string) => {
     return location.pathname === path || location.pathname.startsWith(path + '/');
@@ -14,25 +15,52 @@ export default function DashboardLayout() {
 
   const handleLogout = () => {
     logout();
+    navigate('/login');
   };
 
   return (
-    <div className="d-flex min-vh-100">
+    <div className="d-flex min-vh-100 position-relative">
+      {/* Mobile Backdrop */}
+      {sidebarOpen && (
+        <div
+          className="position-fixed top-0 start-0 w-100 h-100 bg-dark bg-opacity-50 d-md-none"
+          style={{ zIndex: 1040 }}
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
       {/* Sidebar */}
-      <div className="bg-dark text-white" style={{ width: '250px', flexShrink: 0 }}>
+      <div
+        className={`bg-dark text-white d-flex flex-column ${
+          sidebarOpen
+            ? 'position-fixed top-0 start-0 h-100 shadow-lg'
+            : 'd-none d-md-flex'
+        }`}
+        style={{ width: '250px', flexShrink: 0, zIndex: 1050 }}
+      >
         <div className="p-3 border-bottom border-secondary">
-          <div className="d-flex align-items-center">
-            <i className="fab fa-whatsapp fa-2x text-success me-2"></i>
-            <div>
-              <div className="fw-bold">WhatsApp AI</div>
-              <small className="text-muted">Automation</small>
+          <div className="d-flex align-items-center justify-content-between">
+            <div className="d-flex align-items-center">
+              <i className="fab fa-whatsapp fa-2x text-success me-2"></i>
+              <div>
+                <div className="fw-bold">WhatsApp AI</div>
+                <small className="text-muted">Automation</small>
+              </div>
             </div>
+            <button
+              className="btn btn-link text-white-50 d-md-none p-0"
+              onClick={() => setSidebarOpen(false)}
+              aria-label="Close Sidebar"
+            >
+              <i className="fas fa-times fa-lg"></i>
+            </button>
           </div>
         </div>
 
         <nav className="py-3">
           <Link
             to="/"
+            onClick={() => setSidebarOpen(false)}
             className={`d-flex align-items-center px-3 py-2 text-decoration-none ${
               isActive('/') && location.pathname === '/'
                 ? 'bg-primary text-white'
@@ -45,6 +73,7 @@ export default function DashboardLayout() {
 
           <Link
             to="/inbox"
+            onClick={() => setSidebarOpen(false)}
             className={`d-flex align-items-center px-3 py-2 text-decoration-none ${
               isActive('/inbox')
                 ? 'bg-primary text-white'
@@ -57,6 +86,7 @@ export default function DashboardLayout() {
 
           <Link
             to="/contacts"
+            onClick={() => setSidebarOpen(false)}
             className={`d-flex align-items-center px-3 py-2 text-decoration-none ${
               isActive('/contacts')
                 ? 'bg-primary text-white'
@@ -73,6 +103,7 @@ export default function DashboardLayout() {
 
           <Link
             to="/settings/whatsapp"
+            onClick={() => setSidebarOpen(false)}
             className={`d-flex align-items-center px-3 py-2 text-decoration-none ${
               isActive('/settings/whatsapp')
                 ? 'bg-primary text-white'
@@ -85,6 +116,7 @@ export default function DashboardLayout() {
 
           <Link
             to="/settings/team"
+            onClick={() => setSidebarOpen(false)}
             className={`d-flex align-items-center px-3 py-2 text-decoration-none ${
               isActive('/settings/team')
                 ? 'bg-primary text-white'
@@ -97,6 +129,7 @@ export default function DashboardLayout() {
 
           <Link
             to="/settings/workspace"
+            onClick={() => setSidebarOpen(false)}
             className={`d-flex align-items-center px-3 py-2 text-decoration-none ${
               isActive('/settings/workspace')
                 ? 'bg-primary text-white'
@@ -110,11 +143,18 @@ export default function DashboardLayout() {
       </div>
 
       {/* Main Content */}
-      <div className="flex-fill d-flex flex-column">
+      <div className="flex-fill d-flex flex-column min-w-0">
         {/* Header */}
-        <header className="bg-white border-bottom px-4 py-3">
+        <header className="bg-white border-bottom px-3 px-md-4 py-3">
           <div className="d-flex justify-content-between align-items-center">
-            <div>
+            <div className="d-flex align-items-center gap-2">
+              <button
+                className="btn btn-outline-secondary btn-sm d-md-none me-2"
+                onClick={() => setSidebarOpen(!sidebarOpen)}
+                aria-label="Toggle Navigation"
+              >
+                <i className="fas fa-bars"></i>
+              </button>
               <h5 className="mb-0">
                 {user?.memberships?.[0]?.workspaceName || 'Workspace'}
               </h5>
@@ -129,7 +169,7 @@ export default function DashboardLayout() {
                   <div className="avatar avatar-sm bg-primary text-white me-2">
                     {user?.firstName?.[0]}{user?.lastName?.[0]}
                   </div>
-                  <div className="text-start">
+                  <div className="text-start d-none d-sm-block">
                     <div className="small fw-bold">
                       {user?.firstName} {user?.lastName}
                     </div>

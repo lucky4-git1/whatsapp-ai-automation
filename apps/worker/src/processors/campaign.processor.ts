@@ -63,7 +63,7 @@ export async function processCampaign(job: Job<CampaignJobData>) {
       const batch = contacts.slice(i, i + batchSize);
 
       await Promise.allSettled(
-        batch.map(async (contact) => {
+        batch.map(async (contact: any) => {
           try {
             // Create conversation if not exists
             let conversation = await prisma.conversation.findFirst({

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { conversationApi } from '../../lib/api';
 import { formatDistanceToNow } from 'date-fns';
@@ -55,7 +56,7 @@ export default function ConversationDetail({
   const handleSendMessage = (e: React.FormEvent) => {
     e.preventDefault();
     // Message sending will be implemented with WebSocket or API
-    toast.info('Message sending will be implemented');
+    toast('Message sending will be implemented', { icon: 'ℹ️' });
     setMessage('');
   };
 
@@ -65,6 +66,13 @@ export default function ConversationDetail({
       <div className="p-3 border-bottom bg-white">
         <div className="d-flex justify-content-between align-items-start">
           <div className="d-flex align-items-center">
+            <Link
+              to="/inbox"
+              className="btn btn-sm btn-outline-secondary d-md-none me-2"
+              title="Back to conversations"
+            >
+              <i className="fas fa-arrow-left"></i>
+            </Link>
             <div className="avatar avatar-lg me-3">
               {conv.contact?.name?.[0]?.toUpperCase() || '?'}
             </div>

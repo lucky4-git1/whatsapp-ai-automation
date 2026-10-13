@@ -47,11 +47,13 @@ export async function processMessageSending(job: Job<MessageSendingJobData>) {
     const { conversation } = message;
     const { whatsappAccount, contact } = conversation;
 
-    // Decrypt credentials
+    // Initialize provider
     const provider = new CloudApiProvider();
     await provider.initialize({
+      apiVersion: (whatsappAccount as any).apiVersion || 'v19.0',
+      graphApiUrl: (whatsappAccount as any).graphApiUrl || 'https://graph.facebook.com',
       phoneNumberId: whatsappAccount.phoneNumberId,
-      accessToken: whatsappAccount.accessToken, // Should decrypt in production
+      accessToken: whatsappAccount.accessToken,
       businessAccountId: whatsappAccount.businessAccountId,
     });
 
@@ -60,41 +62,56 @@ export async function processMessageSending(job: Job<MessageSendingJobData>) {
     // Send based on type
     switch (type) {
       case 'TEXT':
-        response = await provider.sendTextMessage(contact.phoneNumber, content);
+        response = await provider.sendMessage({
+          to: contact.phoneNumber,
+          type: 'text',
+          text: { body: content },
+        });
         break;
 
       case 'TEMPLATE':
         if (!templateData) throw new Error('Template data required');
-        response = await provider.sendTemplateMessage(
-          contact.phoneNumber,
-          templateData.name,
-          templateData.languageCode,
-          templateData.components
-        );
+        response = await provider.sendMessage({
+          to: contact.phoneNumber,
+          type: 'template',
+          template: {
+            name: templateData.name,
+            language: { code: templateData.languageCode },
+            components: templateData.components,
+          },
+        });
         break;
 
       case 'IMAGE':
         if (!mediaUrl) throw new Error('Media URL required for image');
-        response = await provider.sendMediaMessage(
-          contact.phoneNumber,
-          'image',
-          mediaUrl,
-          content
-        );
+        response = await provider.sendMessage({
+          to: contact.phoneNumber,
+          type: 'image',
+          image: {
+            link: mediaUrl,
+            caption: content,
+          },
+        });
         break;
 
       case 'DOCUMENT':
         if (!mediaUrl) throw new Error('Media URL required for document');
-        response = await provider.sendMediaMessage(
-          contact.phoneNumber,
-          'document',
-          mediaUrl,
-          content
-        );
+        response = await provider.sendMessage({
+          to: contact.phoneNumber,
+          type: 'document',
+          document: {
+            link: mediaUrl,
+            caption: content,
+          },
+        });
         break;
 
       default:
         throw new Error(`Unsupported message type: ${type}`);
+    }
+
+    if (!response.success) {
+      throw new Error(response.error?.message || 'Failed to send WhatsApp message');
     }
 
     // Update message with WhatsApp message ID

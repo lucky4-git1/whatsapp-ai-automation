@@ -2,26 +2,13 @@ import { FastifyRequest, FastifyReply } from 'fastify';
 import { ERROR_CODES, ROLE_PERMISSIONS } from '@whatsapp-automation/shared';
 import { prisma } from '@whatsapp-automation/database';
 
-export interface AuthenticatedRequest extends FastifyRequest {
-  user?: {
-    id: string;
-    email: string;
-    firstName: string;
-    lastName: string;
-    memberships: Array<{
-      organizationId: string;
-      workspaceId: string | null;
-      role: string;
-    }>;
-  };
-  organizationId?: string;
-  workspaceId?: string;
-}
+export type AuthenticatedRequest = FastifyRequest;
 
 export async function authenticate(
-  request: AuthenticatedRequest,
+  request: FastifyRequest,
   reply: FastifyReply
 ) {
+  const req = request as AuthenticatedRequest;
   try {
     await request.jwtVerify();
     
@@ -62,7 +49,7 @@ export async function authenticate(
       });
     }
 
-    request.user = {
+    req.user = {
       id: user.id,
       email: user.email,
       firstName: user.firstName,
@@ -81,9 +68,10 @@ export async function authenticate(
 }
 
 export function requireWorkspace(
-  request: AuthenticatedRequest,
+  request: FastifyRequest,
   reply: FastifyReply
 ) {
+  const req = request as AuthenticatedRequest;
   const workspaceId = request.headers['x-workspace-id'] as string;
 
   if (!workspaceId) {
@@ -97,7 +85,7 @@ export function requireWorkspace(
   }
 
   // Verify user has access to this workspace
-  const membership = request.user?.memberships.find(
+  const membership = req.user?.memberships.find(
     (m) => m.workspaceId === workspaceId
   );
 
@@ -111,13 +99,14 @@ export function requireWorkspace(
     });
   }
 
-  request.workspaceId = workspaceId;
-  request.organizationId = membership.organizationId;
+  req.workspaceId = workspaceId;
+  req.organizationId = membership.organizationId;
 }
 
 export function requirePermission(permission: string) {
-  return async (request: AuthenticatedRequest, reply: FastifyReply) => {
-    const workspaceId = request.workspaceId;
+  return async (request: FastifyRequest, reply: FastifyReply) => {
+    const req = request as AuthenticatedRequest;
+    const workspaceId = req.workspaceId;
 
     if (!workspaceId) {
       return reply.status(400).send({
@@ -129,7 +118,7 @@ export function requirePermission(permission: string) {
       });
     }
 
-    const membership = request.user?.memberships.find(
+    const membership = req.user?.memberships.find(
       (m) => m.workspaceId === workspaceId
     );
 

@@ -22,7 +22,7 @@ export default function DashboardPage() {
     {
       label: 'Total Conversations',
       value: conversations?.data?.meta?.total || 0,
-      icon: 'fa-comments',
+      icon: 'fas fa-comments',
       color: 'primary',
       link: '/inbox',
     },
@@ -30,21 +30,21 @@ export default function DashboardPage() {
       label: 'Open Conversations',
       value: conversations?.data?.data?.filter((c: any) => c.status === 'OPEN')
         .length || 0,
-      icon: 'fa-inbox',
+      icon: 'fas fa-inbox',
       color: 'success',
       link: '/inbox',
     },
     {
       label: 'Total Contacts',
       value: contacts?.data?.meta?.total || 0,
-      icon: 'fa-users',
+      icon: 'fas fa-users',
       color: 'info',
       link: '/contacts',
     },
     {
       label: 'WhatsApp Accounts',
       value: accounts?.data?.data?.accounts?.length || 0,
-      icon: 'fa-whatsapp',
+      icon: 'fab fa-whatsapp',
       color: 'warning',
       link: '/settings/whatsapp',
     },
@@ -72,7 +72,7 @@ export default function DashboardPage() {
                     <div
                       className={`rounded p-3 bg-${stat.color} bg-opacity-10`}
                     >
-                      <i className={`fas ${stat.icon} fa-lg text-${stat.color}`}></i>
+                      <i className={`${stat.icon} fa-lg text-${stat.color}`}></i>
                     </div>
                   </div>
                 </div>
@@ -93,7 +93,7 @@ export default function DashboardPage() {
               </Link>
             </div>
             <div className="card-body p-0">
-              {conversations?.data?.data?.length === 0 ? (
+              {(!conversations?.data?.data || conversations.data.data.length === 0) ? (
                 <div className="empty-state">
                   <i className="fas fa-comments"></i>
                   <p>No conversations yet</p>
@@ -103,7 +103,7 @@ export default function DashboardPage() {
                 </div>
               ) : (
                 <div className="list-group list-group-flush">
-                  {conversations?.data?.data?.map((conv: any) => (
+                  {conversations.data.data.map((conv: any) => (
                     <Link
                       key={conv.id}
                       to={`/inbox?conversation=${conv.id}`}
@@ -160,7 +160,7 @@ export default function DashboardPage() {
               </Link>
             </div>
             <div className="card-body">
-              {accounts?.data?.data?.accounts?.length === 0 ? (
+              {(!accounts?.data?.data?.accounts || accounts.data.data.accounts.length === 0) ? (
                 <div className="text-center py-3">
                   <i className="fab fa-whatsapp fa-3x text-muted mb-3"></i>
                   <p className="text-muted mb-3">No WhatsApp account connected</p>
@@ -170,7 +170,7 @@ export default function DashboardPage() {
                 </div>
               ) : (
                 <div className="list-group list-group-flush">
-                  {accounts?.data?.data?.accounts?.map((account: any) => (
+                  {accounts.data.data.accounts.map((account: any) => (
                     <div key={account.id} className="list-group-item px-0">
                       <div className="d-flex align-items-start">
                         <div className="me-2">

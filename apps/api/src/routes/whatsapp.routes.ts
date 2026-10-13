@@ -22,7 +22,7 @@ const connectAccountSchema = z.object({
 
 export async function whatsappRoutes(server: FastifyInstance) {
   // Webhook verification (GET) - no authentication required
-  server.get('/webhook', async (request, reply) => {
+  server.get('/webhook', async (request: any, reply) => {
     const mode = request.query['hub.mode'];
     const token = request.query['hub.verify_token'];
     const challenge = request.query['hub.challenge'];

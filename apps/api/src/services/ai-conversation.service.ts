@@ -55,11 +55,11 @@ export class AIConversationService {
     try {
       await this.aiEngine.initialize();
       this.initialized = true;
-      logger.info('AI conversation service initialized', {
+      logger.info({
         provider: this.aiEngine.getProviderName(),
-      });
+      }, 'AI conversation service initialized');
     } catch (error) {
-      logger.error('Failed to initialize AI conversation service', { error });
+      logger.error({ error }, 'Failed to initialize AI conversation service');
       // Don't throw - allow server to start even if AI is not available
     }
   }
@@ -70,8 +70,12 @@ export class AIConversationService {
   async generateResponse(
     workspaceId: string,
     conversationId: string,
-    userMessage?: string
+    userMessage?: string,
+    saveMessage = true
   ): Promise<AIResponse | null> {
+    if (!this.initialized) {
+      await this.initialize();
+    }
     if (!this.initialized) {
       logger.warn('AI engine not initialized');
       return null;
@@ -129,7 +133,7 @@ export class AIConversationService {
       });
 
       // Save AI response as a message
-      if (response.message) {
+      if (saveMessage && response.message) {
         await prisma.message.create({
           data: {
             conversationId,
@@ -159,11 +163,11 @@ export class AIConversationService {
 
       return response;
     } catch (error: any) {
-      logger.error('Failed to generate AI response', {
+      logger.error({
         error,
         conversationId,
         workspaceId,
-      });
+      }, 'Failed to generate AI response');
 
       if (error.statusCode) {
         throw error;
@@ -212,17 +216,17 @@ export class AIConversationService {
       );
 
       if (response) {
-        logger.info('AI response generated', {
+        logger.info({
           conversationId,
           confidence: response.confidence,
           usedKnowledgeBase: response.usedKnowledgeBase,
-        });
+        }, 'AI response generated');
       }
     } catch (error) {
-      logger.error('Failed to process incoming message with AI', {
+      logger.error({
         error,
         conversationId,
-      });
+      }, 'Failed to process incoming message with AI');
       // Don't throw - gracefully degrade
     }
   }

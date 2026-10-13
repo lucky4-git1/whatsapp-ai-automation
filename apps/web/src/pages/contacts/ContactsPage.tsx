@@ -77,40 +77,52 @@ export default function ContactsPage() {
           </div>
 
           {/* Contacts Table */}
-          {isLoading ? (
-            <div className="text-center py-5">
-              <div className="spinner-border text-primary" role="status">
-                <span className="visually-hidden">Loading...</span>
-              </div>
-            </div>
-          ) : contacts?.data?.length === 0 ? (
-            <div className="empty-state">
-              <i className="fas fa-users"></i>
-              <p>No contacts found</p>
-              <button
-                className="btn btn-primary"
-                onClick={() => setShowCreateModal(true)}
-              >
-                Add Your First Contact
-              </button>
-            </div>
-          ) : (
-            <>
-              <div className="table-responsive">
-                <table className="table table-hover align-middle">
-                  <thead>
-                    <tr>
-                      <th>Name</th>
-                      <th>Phone</th>
-                      <th>Email</th>
-                      <th>Tags</th>
-                      <th>Conversations</th>
-                      <th>Last Interaction</th>
-                      <th width="100">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {contacts?.data?.map((contact: any) => (
+          {(() => {
+            const contactList = (contacts?.data?.data as any[]) || [];
+            const contactMeta = contacts?.data?.meta;
+
+            if (isLoading) {
+              return (
+                <div className="text-center py-5">
+                  <div className="spinner-border text-primary" role="status">
+                    <span className="visually-hidden">Loading...</span>
+                  </div>
+                </div>
+              );
+            }
+
+            if (contactList.length === 0) {
+              return (
+                <div className="empty-state">
+                  <i className="fas fa-users"></i>
+                  <p>No contacts found</p>
+                  <button
+                    className="btn btn-primary"
+                    onClick={() => setShowCreateModal(true)}
+                  >
+                    Add Your First Contact
+                  </button>
+                </div>
+              );
+            }
+
+            return (
+              <>
+                <div className="table-responsive">
+                  <table className="table table-hover align-middle">
+                    <thead>
+                      <tr>
+                        <th>Name</th>
+                        <th>Phone</th>
+                        <th>Email</th>
+                        <th>Tags</th>
+                        <th>Conversations</th>
+                        <th>Last Interaction</th>
+                        <th style={{ width: '100px' }}>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {contactList.map((contact: any) => (
                       <tr key={contact.id}>
                         <td>
                           <div className="d-flex align-items-center">
@@ -201,12 +213,12 @@ export default function ContactsPage() {
               </div>
 
               {/* Pagination */}
-              {contacts?.meta && (
+              {contactMeta && (
                 <div className="d-flex justify-content-between align-items-center mt-3">
                   <div className="text-muted">
                     Showing {((filters.page - 1) * filters.limit) + 1} to{' '}
-                    {Math.min(filters.page * filters.limit, contacts.meta.total)} of{' '}
-                    {contacts.meta.total} contacts
+                    {Math.min(filters.page * filters.limit, contactMeta.total || 0)} of{' '}
+                    {contactMeta.total || 0} contacts
                   </div>
                   <nav>
                     <ul className="pagination mb-0">
@@ -229,7 +241,7 @@ export default function ContactsPage() {
                       </li>
                       <li
                         className={`page-item ${
-                          !contacts.meta.hasMore ? 'disabled' : ''
+                          !contactMeta.hasMore ? 'disabled' : ''
                         }`}
                       >
                         <button
@@ -246,7 +258,8 @@ export default function ContactsPage() {
                 </div>
               )}
             </>
-          )}
+            );
+          })()}
         </div>
       </div>
 

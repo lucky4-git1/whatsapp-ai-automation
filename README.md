@@ -1,180 +1,231 @@
 # WhatsApp AI Automation Platform
 
-A production-grade, multi-tenant SaaS platform for AI-powered WhatsApp customer communication and automation.
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.5-blue.svg)](https://www.typescriptlang.org/)
+[![Turborepo](https://img.shields.io/badge/Turborepo-2.0-ef4444.svg)](https://turbo.build/repo)
+[![Fastify](https://img.shields.io/badge/Fastify-4.28-black.svg)](https://fastify.dev/)
+[![React](https://img.shields.io/badge/React-18-61dafb.svg)](https://react.dev/)
+[![Prisma](https://img.shields.io/badge/Prisma-5.15-2d3748.svg)](https://www.prisma.io/)
+[![License](https://img.shields.io/badge/License-Proprietary-green.svg)]()
 
-## Features
+A production-grade, multi-tenant SaaS platform for autonomous WhatsApp customer communications, intelligent AI orchestration, team collaboration, and automated workflows powered by the official Meta WhatsApp Business Cloud API.
 
-- 🤖 AI-powered customer support with multilingual support (English, Telugu, Hindi)
-- 💬 Unified conversation inbox with human takeover
-- 🎨 Visual workflow builder for conversation automation
-- 📊 Lead capture, qualification, and management
-- 📱 Official Meta WhatsApp Business Cloud API integration
-- 📧 Template-based campaigns with consent management
-- 📅 Appointment scheduling and order management
-- 📈 Analytics and reporting dashboard
-- 👥 Multi-tenant architecture with team collaboration
-- 🔒 Enterprise-grade security and data isolation
+---
 
-## Technology Stack
+## 🌟 Key Features
 
-### Frontend
-- React + TypeScript
-- Vite
-- Bootstrap 5
-- React Router
-- TanStack Query
-- React Flow (workflow builder)
+- **🤖 Autonomous AI Engine**
+  - Multi-provider LLM support (**OpenAI GPT-4 Turbo / GPT-4o**, **Anthropic Claude 3 Opus / Sonnet**)
+  - Vector knowledge base semantic search powered by **Pinecone**
+  - Multilingual support with automated language detection (**English, Telugu, Hindi**)
+  - Autonomous customer responses with confidence scoring and human takeover safeguards
 
-### Backend
-- Node.js + TypeScript
-- Fastify
-- PostgreSQL
-- Prisma ORM
-- Redis
-- BullMQ (background jobs)
+- **💬 Real-Time Unified Inbox**
+  - Multi-agent conversational workspace with conversation reassignment
+  - Seamless human takeover mode with keyword-triggered AI pause
+  - Rich media messaging (text, templates, media, documents)
+  - Full conversation audit trail and message delivery status tracking
 
-### Infrastructure
-- Docker & Docker Compose
-- Automated migrations
-- Health checks & monitoring
+- **📱 Official Meta WhatsApp Cloud API Integration**
+  - Multi-account management with independent phone number IDs and credentials
+  - Cryptographic HMAC-SHA256 webhook signature verification
+  - Deduplicated, idempotent event ingestion pipeline
+  - Template synchronization and broadcast management
 
-## Quick Start
+- **⚙️ Workflow & Campaign Engine**
+  - Multi-step event-driven automation engine with conditional branching
+  - High-throughput background processing with **BullMQ** & **Redis**
+  - Contact segmentation, tagging, and targeted outbound campaigns
+  - Graceful worker shutdowns and automatic retry with exponential backoff
 
-### Prerequisites
+- **👥 Multi-Tenant SaaS Architecture**
+  - Hierarchical Organization & Workspace isolation
+  - Role-Based Access Control (**Owner**, **Admin**, **Agent**)
+  - JWT token and HTTP-only session cookies with request throttling & Helmet protection
+  - Structured JSON logging via **Pino**
 
-- Node.js >= 20.0.0
-- PostgreSQL >= 15
-- Redis >= 7
-- Docker (optional, for local development)
+- **📱 Polished & Responsive UI**
+  - Clean, modern dashboard built with React 18, Vite & Bootstrap 5
+  - Fully responsive design with mobile drawer navigation & adaptive layouts
+  - Quick-Launch Presentation / Demo Mode for stakeholders and live reviews
 
-### Installation
+---
 
-1. Clone the repository:
-```bash
-git clone https://github.com/lucky4-git1/whatsapp-ai-automation.git
-cd whatsapp-ai-automation
+## 🏗️ Architecture Overview
+
+```mermaid
+graph TD
+  User[Browser / Client] -->|HTTP / React 18| WebApp[apps/web (Vite Dashboard)]
+  Meta[Meta WhatsApp Cloud API] -->|Webhooks| API[apps/api (Fastify REST)]
+  WebApp -->|REST API| API
+  
+  subgraph Data Layer
+    DB[(PostgreSQL 15+)]
+    Redis[(Redis 7+)]
+  end
+  
+  API --> DB
+  API --> Redis
+  
+  subgraph Background Workers
+    Worker[apps/worker (BullMQ)]
+  end
+  
+  Redis --> Worker
+  Worker --> DB
+  Worker -->|Outbound Messages| Meta
+  
+  subgraph AI Orchestration
+    AIEngine[packages/ai-engine]
+    Pinecone[(Pinecone Vector DB)]
+    OpenAI[OpenAI / Anthropic]
+  end
+  
+  Worker --> AIEngine
+  API --> AIEngine
+  AIEngine --> Pinecone
+  AIEngine --> OpenAI
 ```
 
-2. Install dependencies:
-```bash
-npm install
-```
+---
 
-3. Copy environment configuration:
-```bash
-cp .env.example .env
-```
-
-4. Configure your `.env` file with required credentials
-
-5. Run database migrations:
-```bash
-npm run db:migrate
-```
-
-6. Start development servers:
-```bash
-npm run dev
-```
-
-The application will be available at:
-- Web: http://localhost:3000
-- API: http://localhost:4000
-
-## Project Structure
+## 📁 Repository Structure
 
 ```
 whatsapp-ai-automation/
 ├── apps/
-│   ├── web/           # React frontend application
-│   ├── api/           # Fastify API server
-│   └── worker/        # Background job worker
+│   ├── api/                   # Fastify HTTP REST API server
+│   ├── web/                   # React 18 + Vite frontend dashboard
+│   └── worker/                # BullMQ queue processors for background tasks
 ├── packages/
-│   ├── database/      # Prisma schema and migrations
-│   ├── shared/        # Shared types and utilities
-│   ├── validation/    # Zod schemas
-│   ├── whatsapp-provider/  # WhatsApp Cloud API adapter
-│   ├── ai-engine/     # AI orchestration
-│   ├── workflow-engine/    # Workflow execution engine
-│   └── observability/ # Logging and monitoring
-├── infra/
-│   ├── docker/        # Docker configurations
-│   └── deployment/    # Deployment manifests
-├── docs/              # Documentation
-└── tests/             # Test suites
+│   ├── ai-engine/             # LLM provider orchestration, multilingual & Pinecone
+│   ├── database/              # Prisma ORM schema, migrations, and database client
+│   ├── observability/         # Pino logging, metrics, and error serializers
+│   ├── shared/                # Universal TypeScript interfaces, constants, permissions
+│   ├── validation/            # Zod validation schemas
+│   ├── whatsapp-provider/     # Official Meta Graph API adapter & webhook validator
+│   └── workflow-engine/       # Visual workflow rule evaluation engine
+├── docs/                      # Architectural specs, deployment notes & phase summaries
+├── docker-compose.yml         # Container configuration for Redis and PostgreSQL
+├── package.json               # Monorepo root workspace configuration
+└── turbo.json                 # Turborepo task pipeline definition
 ```
 
-## WhatsApp Setup
+---
 
-To connect your WhatsApp Business account:
+## 🚀 Getting Started
 
-1. Create a Meta Business account
-2. Create a Meta App with WhatsApp Business API access
-3. Complete business verification
-4. Configure webhook URL and verify
-5. Add webhook secret to `.env`
-6. Connect through the platform UI
+### Prerequisites
 
-See [docs/whatsapp-setup.md](docs/whatsapp-setup.md) for detailed instructions.
+- **Node.js**: `>= 20.0.0`
+- **npm**: `>= 10.0.0`
+- **PostgreSQL**: `>= 15.0`
+- **Redis**: `>= 7.0` (for BullMQ queues)
 
-## Development
+### 1. Installation
+
+Clone the repository and install all monorepo dependencies:
 
 ```bash
-# Run all apps in development mode
+git clone https://github.com/lucky4-git1/whatsapp-ai-automation.git
+cd whatsapp-ai-automation
+npm install
+```
+
+### 2. Configure Environment
+
+Copy the example configuration to `.env`:
+
+```bash
+cp .env.example .env
+```
+
+Ensure the key values in `.env` are updated:
+
+```env
+# Database & Cache
+DATABASE_URL="postgresql://postgres:postgres@localhost:5432/whatsapp_automation"
+REDIS_URL="redis://localhost:6379"
+
+# Security
+JWT_SECRET="replace-with-a-secure-random-32-character-secret"
+SESSION_SECRET="replace-with-a-secure-random-32-character-secret"
+
+# Ports
+API_PORT=4000
+VITE_API_URL="http://localhost:4000"
+
+# AI Provider (Optional for testing)
+AI_PROVIDER="openai"
+OPENAI_API_KEY="sk-..."
+```
+
+### 3. Database Migration
+
+Generate the Prisma client and apply migrations:
+
+```bash
+npm run db:generate
+npm run db:migrate
+```
+
+### 4. Running Locally
+
+To run all services concurrently in development mode (Web UI + API Server + Background Worker):
+
+```bash
 npm run dev
+```
 
-# Build all apps
-npm run build
+Or run individual apps:
 
-# Run tests
-npm run test
+```bash
+# Frontend Dashboard (http://localhost:3000)
+npm run dev --workspace=@whatsapp-automation/web
 
-# Type checking
+# Backend API (http://localhost:4000)
+npm run dev --workspace=@whatsapp-automation/api
+
+# Background Queue Worker
+npm run dev --workspace=@whatsapp-automation/worker
+```
+
+---
+
+## 🎭 Presentation & Demo Mode
+
+For live presentations and stakeholder reviews:
+1. Navigate to `http://localhost:3000/login`
+2. Click **"Quick Launch Demo (Presentation Mode)"** at the bottom of the login card.
+3. This instantly loads the authenticated executive workspace with pre-populated navigation, metrics, team controls, and sample conversations without requiring live Meta webhook configurations.
+
+---
+
+## 🧪 Testing & Verification
+
+Run monorepo-wide type checking and production builds:
+
+```bash
+# Type check all 10 packages
 npm run type-check
 
-# Linting
-npm run lint
+# Compile and build all production bundles
+npm run build
 
-# Database operations
-npm run db:generate   # Generate Prisma client
-npm run db:migrate    # Run migrations
-npm run db:studio     # Open Prisma Studio
-```
-
-## Testing
-
-```bash
-# Run all tests
+# Run automated tests
 npm run test
-
-# Run unit tests only
-npm run test:unit
-
-# Run integration tests
-npm run test:integration
-
-# Run e2e tests
-npm run test:e2e
 ```
 
-## Deployment
+---
 
-See [docs/deployment.md](docs/deployment.md) for production deployment instructions.
+## 🔒 Security & Best Practices
 
-## Security
+- **Zero-Trust Multi-Tenancy**: Every database query scopes through `workspaceId` and `organizationId`.
+- **HMAC Verification**: Webhooks from Meta are rejected if the `X-Hub-Signature-256` header fails HMAC-SHA256 validation.
+- **Header Protection**: Fastify configured with secure Helmet CSP policies and CORS origin validation.
+- **Sensitive Redaction**: Database connection strings, API keys, and auth tokens are stripped from Pino logs automatically.
 
-- Never commit `.env` files
-- Rotate credentials regularly
-- Enable 2FA for all team members
-- Review audit logs regularly
-- Keep dependencies updated
+---
 
-Report security vulnerabilities to: security@example.com
+## 📄 License
 
-## License
-
-Copyright © 2024. All rights reserved.
-
-## Support
-
-For support, email support@example.com or open an issue on GitHub.
+Proprietary and Confidential. All rights reserved.

@@ -24,7 +24,7 @@ export class AuthService {
     const passwordHash = await bcrypt.hash(data.password, SALT_ROUNDS);
 
     // Create user and default organization in a transaction
-    const user = await prisma.$transaction(async (tx) => {
+    const user = await prisma.$transaction(async (tx: any) => {
       const newUser = await tx.user.create({
         data: {
           email: data.email,
@@ -119,7 +119,7 @@ export class AuthService {
       firstName: user.firstName,
       lastName: user.lastName,
       emailVerified: user.emailVerified,
-      memberships: user.memberships.map((m) => ({
+      memberships: user.memberships.map((m: any) => ({
         organizationId: m.organizationId,
         organizationName: m.organization.name,
         organizationSlug: m.organization.slug,

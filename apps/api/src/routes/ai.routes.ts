@@ -4,7 +4,7 @@
  */
 
 import { FastifyInstance } from 'fastify';
-import { authMiddleware } from '../middleware/auth.middleware';
+import { authenticate, requireWorkspace } from '../middleware/auth.middleware';
 import { aiConversationService } from '../services/ai-conversation.service';
 import { z } from 'zod';
 import { ERROR_CODES } from '@whatsapp-automation/shared';
@@ -30,17 +30,18 @@ const searchKnowledgeSchema = z.object({
 });
 
 export async function aiRoutes(fastify: FastifyInstance) {
-  // All AI routes require authentication
-  fastify.addHook('onRequest', authMiddleware);
+  // All AI routes require authentication and workspace context
+  fastify.addHook('preHandler', authenticate);
+  fastify.addHook('preHandler', requireWorkspace);
 
   /**
    * Generate AI response for conversation
    * POST /ai/generate-response
    */
-  fastify.post('/generate-response', async (request, reply) => {
+  fastify.post('/generate-response', async (request: any, reply) => {
     try {
       const body = generateResponseSchema.parse(request.body);
-      const { workspaceId } = request.user;
+      const workspaceId = request.workspaceId || (request.headers['x-workspace-id'] as string);
 
       const response = await aiConversationService.generateResponse(
         workspaceId,
@@ -61,7 +62,7 @@ export async function aiRoutes(fastify: FastifyInstance) {
         data: response,
       });
     } catch (error: any) {
-      logger.error('Error generating AI response', { error });
+      logger.error({ error }, 'Error generating AI response');
 
       if (error.statusCode) {
         return reply.code(error.statusCode).send({
@@ -84,10 +85,10 @@ export async function aiRoutes(fastify: FastifyInstance) {
    * Add document to knowledge base
    * POST /ai/knowledge/documents
    */
-  fastify.post('/knowledge/documents', async (request, reply) => {
+  fastify.post('/knowledge/documents', async (request: any, reply) => {
     try {
       const body = addKnowledgeDocSchema.parse(request.body);
-      const { workspaceId } = request.user;
+      const workspaceId = request.workspaceId || (request.headers['x-workspace-id'] as string);
 
       const aiEngine = aiConversationService.getEngine();
       const knowledgeBase = aiEngine.getKnowledgeBase();
@@ -111,7 +112,7 @@ export async function aiRoutes(fastify: FastifyInstance) {
         },
       });
     } catch (error: any) {
-      logger.error('Error adding knowledge document', { error });
+      logger.error({ error }, 'Error adding knowledge document');
 
       return reply.code(500).send({
         success: false,
@@ -126,10 +127,10 @@ export async function aiRoutes(fastify: FastifyInstance) {
    * Search knowledge base
    * POST /ai/knowledge/search
    */
-  fastify.post('/knowledge/search', async (request, reply) => {
+  fastify.post('/knowledge/search', async (request: any, reply) => {
     try {
       const body = searchKnowledgeSchema.parse(request.body);
-      const { workspaceId } = request.user;
+      const workspaceId = request.workspaceId || (request.headers['x-workspace-id'] as string);
 
       const aiEngine = aiConversationService.getEngine();
       const knowledgeBase = aiEngine.getKnowledgeBase();
@@ -146,7 +147,7 @@ export async function aiRoutes(fastify: FastifyInstance) {
         data: results,
       });
     } catch (error: any) {
-      logger.error('Error searching knowledge base', { error });
+      logger.error({ error }, 'Error searching knowledge base');
 
       return reply.code(500).send({
         success: false,
@@ -175,7 +176,7 @@ export async function aiRoutes(fastify: FastifyInstance) {
         message: 'Document deleted successfully',
       });
     } catch (error: any) {
-      logger.error('Error deleting knowledge document', { error });
+      logger.error({ error }, 'Error deleting knowledge document');
 
       return reply.code(500).send({
         success: false,
@@ -199,7 +200,7 @@ export async function aiRoutes(fastify: FastifyInstance) {
         data: health,
       });
     } catch (error: any) {
-      logger.error('Error checking AI health', { error });
+      logger.error({ error }, 'Error checking AI health');
 
       return reply.code(500).send({
         success: false,
@@ -233,7 +234,7 @@ export async function aiRoutes(fastify: FastifyInstance) {
         data: detection,
       });
     } catch (error: any) {
-      logger.error('Error detecting language', { error });
+      logger.error({ error }, 'Error detecting language');
 
       return reply.code(500).send({
         success: false,

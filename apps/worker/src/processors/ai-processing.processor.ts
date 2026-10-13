@@ -6,7 +6,7 @@
 import { Job } from 'bullmq';
 import { prisma } from '@whatsapp-automation/database';
 import { logger } from '@whatsapp-automation/observability';
-import { aiConversationService } from '../../../api/src/services/ai-conversation.service';
+import { aiConversationService } from '../services/ai-conversation.service';
 import { messageSendingQueue } from '../queues';
 
 interface AIProcessingJobData {
@@ -35,7 +35,8 @@ export async function processAI(job: Job<AIProcessingJobData>) {
     const aiResponse = await aiConversationService.generateResponse(
       conversation.workspaceId,
       conversationId,
-      messageContent
+      messageContent,
+      false
     );
 
     if (!aiResponse) {

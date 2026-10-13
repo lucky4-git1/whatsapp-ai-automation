@@ -18,7 +18,7 @@ export async function workspaceRoutes(server: FastifyInstance) {
   server.addHook('preHandler', authenticate);
 
   // Create workspace
-  server.post('/', async (request: AuthenticatedRequest, reply) => {
+  server.post('/', async (request: any, reply) => {
     const data = createWorkspaceSchema.parse(request.body);
     
     // Use first organization membership
@@ -43,7 +43,7 @@ export async function workspaceRoutes(server: FastifyInstance) {
   });
 
   // List workspaces
-  server.get('/', async (request: AuthenticatedRequest, reply) => {
+  server.get('/', async (request: any, reply) => {
     const organizationId = request.user!.memberships[0]?.organizationId;
     
     if (!organizationId) {
@@ -65,7 +65,7 @@ export async function workspaceRoutes(server: FastifyInstance) {
   server.get(
     '/:workspaceId',
     { preHandler: [requireWorkspace] },
-    async (request: AuthenticatedRequest, reply) => {
+    async (request: any, reply) => {
       const { workspaceId } = request.params as { workspaceId: string };
       
       const workspace = await workspaceService.getWorkspace(
@@ -86,7 +86,7 @@ export async function workspaceRoutes(server: FastifyInstance) {
     {
       preHandler: [requireWorkspace, requirePermission(PERMISSIONS.SETTINGS_UPDATE)],
     },
-    async (request: AuthenticatedRequest, reply) => {
+    async (request: any, reply) => {
       const { workspaceId } = request.params as { workspaceId: string };
       const data = updateWorkspaceSchema.parse(request.body);
       
@@ -109,7 +109,7 @@ export async function workspaceRoutes(server: FastifyInstance) {
     {
       preHandler: [requireWorkspace, requirePermission(PERMISSIONS.TEAM_INVITE)],
     },
-    async (request: AuthenticatedRequest, reply) => {
+    async (request: any, reply) => {
       const { workspaceId } = request.params as { workspaceId: string };
       const data = inviteMemberSchema.parse({
         ...request.body,
@@ -132,7 +132,7 @@ export async function workspaceRoutes(server: FastifyInstance) {
   server.get(
     '/:workspaceId/members',
     { preHandler: [requireWorkspace] },
-    async (request: AuthenticatedRequest, reply) => {
+    async (request: any, reply) => {
       const { workspaceId } = request.params as { workspaceId: string };
       
       const members = await workspaceService.getMembers(
@@ -153,7 +153,7 @@ export async function workspaceRoutes(server: FastifyInstance) {
     {
       preHandler: [requireWorkspace, requirePermission(PERMISSIONS.TEAM_MANAGE)],
     },
-    async (request: AuthenticatedRequest, reply) => {
+    async (request: any, reply) => {
       const { workspaceId, membershipId } = request.params as {
         workspaceId: string;
         membershipId: string;
