@@ -132,6 +132,9 @@ export const conversationApi = {
 
   addNote: (id: string, content: string) =>
     api.post<ApiResponse>(`/api/v1/conversations/${id}/notes`, { content }),
+
+  sendMessage: (id: string, content: string, type: string = 'TEXT') =>
+    api.post<ApiResponse>(`/api/v1/conversations/${id}/messages`, { content, type }),
 };
 
 // WhatsApp API
@@ -156,3 +159,28 @@ export const whatsappApi = {
   healthCheck: (id: string) =>
     api.get<ApiResponse>(`/api/v1/whatsapp/accounts/${id}/health`),
 };
+
+// AI Copilot API
+export const aiApi = {
+  generateResponse: (conversationId: string, message?: string) =>
+    api.post<ApiResponse>('/api/v1/ai/generate-response', { conversationId, message }),
+
+  detectLanguage: (text: string) =>
+    api.post<ApiResponse>('/api/v1/ai/detect-language', { text }),
+
+  healthCheck: () =>
+    api.get<ApiResponse>('/api/v1/ai/health'),
+};
+
+// Workflow API
+export const workflowApi = {
+  list: () => api.get<ApiResponse>('/api/v1/workflows'),
+  get: (id: string) => api.get<ApiResponse>(`/api/v1/workflows/${id}`),
+  create: (data: any) => api.post<ApiResponse>('/api/v1/workflows', data),
+  update: (id: string, data: any) => api.patch<ApiResponse>(`/api/v1/workflows/${id}`, data),
+  delete: (id: string) => api.delete<ApiResponse>(`/api/v1/workflows/${id}`),
+  toggle: (id: string) => api.post<ApiResponse>(`/api/v1/workflows/${id}/toggle`),
+  execute: (id: string, initialData?: any) => api.post<ApiResponse>(`/api/v1/workflows/${id}/execute`, { initialData }),
+};
+
+

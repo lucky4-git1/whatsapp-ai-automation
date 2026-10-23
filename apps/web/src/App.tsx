@@ -14,6 +14,7 @@ import DashboardPage from './pages/dashboard/DashboardPage';
 import InboxPage from './pages/inbox/InboxPage';
 import ContactsPage from './pages/contacts/ContactsPage';
 import ContactDetailPage from './pages/contacts/ContactDetailPage';
+import WorkflowsPage from './pages/workflows/WorkflowsPage';
 import WhatsAppAccountsPage from './pages/settings/WhatsAppAccountsPage';
 import WorkspaceSettingsPage from './pages/settings/WorkspaceSettingsPage';
 import TeamPage from './pages/settings/TeamPage';
@@ -34,6 +35,7 @@ function App() {
           <Route path="/inbox" element={<InboxPage />} />
           <Route path="/contacts" element={<ContactsPage />} />
           <Route path="/contacts/:id" element={<ContactDetailPage />} />
+          <Route path="/workflows" element={<WorkflowsPage />} />
           <Route path="/settings/whatsapp" element={<WhatsAppAccountsPage />} />
           <Route path="/settings/workspace" element={<WorkspaceSettingsPage />} />
           <Route path="/settings/team" element={<TeamPage />} />

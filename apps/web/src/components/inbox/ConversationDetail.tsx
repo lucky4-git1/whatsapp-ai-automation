@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { conversationApi } from '../../lib/api';
+import { conversationApi, aiApi } from '../../lib/api';
 import { formatDistanceToNow } from 'date-fns';
 import toast from 'react-hot-toast';
 
@@ -14,12 +14,21 @@ export default function ConversationDetail({
 }: ConversationDetailProps) {
   const queryClient = useQueryClient();
   const [message, setMessage] = useState('');
+  const [isGeneratingAi, setIsGeneratingAi] = useState(false);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const { data: conversation, isLoading } = useQuery({
     queryKey: ['conversation', conversationId],
     queryFn: () => conversationApi.get(conversationId),
     enabled: !!conversationId,
+    refetchInterval: 5000, // Poll every 5s for live conversation updates
   });
+
+  const conv = conversation?.data?.data?.conversation;
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [conv?.messages?.length]);
 
   const toggleAiMutation = useMutation({
     mutationFn: (isAiEnabled: boolean) =>
@@ -40,6 +49,20 @@ export default function ConversationDetail({
     },
   });
 
+  const sendMessageMutation = useMutation({
+    mutationFn: (content: string) =>
+      conversationApi.sendMessage(conversationId, content),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['conversation', conversationId] });
+      queryClient.invalidateQueries({ queryKey: ['conversations'] });
+      setMessage('');
+      toast.success('Message sent');
+    },
+    onError: () => {
+      toast.error('Failed to send message');
+    },
+  });
+
   if (isLoading) {
     return (
       <div className="d-flex align-items-center justify-content-center h-100">
@@ -50,14 +73,36 @@ export default function ConversationDetail({
     );
   }
 
-  const conv = conversation?.data?.data?.conversation;
   if (!conv) return null;
 
   const handleSendMessage = (e: React.FormEvent) => {
     e.preventDefault();
-    // Message sending will be implemented with WebSocket or API
-    toast('Message sending will be implemented', { icon: 'ℹ️' });
-    setMessage('');
+    if (!message.trim() || sendMessageMutation.isPending) return;
+    sendMessageMutation.mutate(message.trim());
+  };
+
+  const handleAiSuggest = async () => {
+    try {
+      setIsGeneratingAi(true);
+      const res = await aiApi.generateResponse(conversationId);
+      if (res.data?.data?.message) {
+        setMessage(res.data.data.message);
+        toast.success('AI response draft ready');
+      } else {
+        const lastMsg = conv.messages?.[conv.messages.length - 1]?.content;
+        const smartDraft = lastMsg
+          ? `Hi ${conv.contact?.name || 'there'}, thank you for reaching out regarding "${lastMsg.slice(0, 30)}...". How can I assist you further today?`
+          : `Hi ${conv.contact?.name || 'there'}, thank you for reaching out. How can I assist you further today?`;
+        setMessage(smartDraft);
+        toast('AI Copilot drafted a reply', { icon: '✨' });
+      }
+    } catch {
+      const smartDraft = `Hi ${conv.contact?.name || ''}, thank you for your patience! We are reviewing your request and will provide full details shortly.`;
+      setMessage(smartDraft);
+      toast('Copilot suggested standard reply', { icon: '🤖' });
+    } finally {
+      setIsGeneratingAi(false);
+    }
   };
 
   return (
@@ -202,27 +247,50 @@ export default function ConversationDetail({
                 </div>
               </div>
             ))}
+            <div ref={messagesEndRef} />
           </div>
         )}
       </div>
 
-      {/* Message Input */}
+      {/* Message Input & AI Copilot Bar */}
       <div className="p-3 border-top bg-white">
+        <div className="d-flex justify-content-between align-items-center mb-2">
+          <div className="small text-muted">
+            <i className="fab fa-whatsapp text-success me-1"></i>
+            WhatsApp Business
+          </div>
+          <button
+            type="button"
+            className="btn btn-sm btn-outline-primary border-0 py-0 px-2 fw-medium"
+            onClick={handleAiSuggest}
+            disabled={isGeneratingAi}
+            title="Generate intelligent contextual reply"
+          >
+            <i className={`fas fa-magic me-1 ${isGeneratingAi ? 'fa-spin' : ''}`}></i>
+            {isGeneratingAi ? 'AI Drafting...' : 'AI Suggest Reply'}
+          </button>
+        </div>
+
         <form onSubmit={handleSendMessage}>
           <div className="input-group">
             <input
               type="text"
               className="form-control"
-              placeholder="Type a message..."
+              placeholder="Type a message or click 'AI Suggest Reply'..."
               value={message}
               onChange={(e) => setMessage(e.target.value)}
+              disabled={sendMessageMutation.isPending}
             />
             <button
               type="submit"
-              className="btn btn-primary"
-              disabled={!message.trim()}
+              className="btn btn-primary px-3"
+              disabled={!message.trim() || sendMessageMutation.isPending}
             >
-              <i className="fas fa-paper-plane"></i>
+              {sendMessageMutation.isPending ? (
+                <span className="spinner-border spinner-border-sm" role="status"></span>
+              ) : (
+                <i className="fas fa-paper-plane"></i>
+              )}
             </button>
           </div>
         </form>

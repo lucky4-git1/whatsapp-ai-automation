@@ -97,6 +97,19 @@ export default function DashboardLayout() {
             Contacts
           </Link>
 
+          <Link
+            to="/workflows"
+            onClick={() => setSidebarOpen(false)}
+            className={`d-flex align-items-center px-3 py-2 text-decoration-none ${
+              isActive('/workflows')
+                ? 'bg-primary text-white'
+                : 'text-white-50 hover-bg-secondary'
+            }`}
+          >
+            <i className="fas fa-project-diagram me-2"></i>
+            Workflows
+          </Link>
+
           <div className="px-3 py-2 text-white-50 small fw-bold mt-3">
             SETTINGS
           </div>

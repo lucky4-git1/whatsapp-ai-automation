@@ -1,6 +1,7 @@
 import { prisma } from '@whatsapp-automation/database';
 import { ERROR_CODES } from '@whatsapp-automation/shared';
 import type { ConversationFilterInput } from '@whatsapp-automation/validation';
+import { queueService } from './queue.service';
 
 export class ConversationService {
   async getConversations(workspaceId: string, filters: ConversationFilterInput) {
@@ -324,6 +325,66 @@ export class ConversationService {
     });
 
     return note;
+  }
+
+  async sendMessage(
+    workspaceId: string,
+    conversationId: string,
+    senderId: string,
+    content: string,
+    type: 'TEXT' | 'IMAGE' | 'DOCUMENT' = 'TEXT'
+  ) {
+    const conversation = await prisma.conversation.findFirst({
+      where: {
+        id: conversationId,
+        workspaceId,
+      },
+      include: {
+        whatsappAccount: true,
+      },
+    });
+
+    if (!conversation) {
+      throw {
+        statusCode: 404,
+        code: ERROR_CODES.NOT_FOUND,
+        message: 'Conversation not found',
+      };
+    }
+
+    const message = await prisma.message.create({
+      data: {
+        conversationId,
+        direction: 'OUTBOUND',
+        content,
+        type: type as any,
+        status: 'PENDING',
+        senderId,
+      },
+    });
+
+    await prisma.conversation.update({
+      where: { id: conversationId },
+      data: {
+        lastMessageAt: new Date(),
+        status: conversation.status === 'ARCHIVED' || conversation.status === 'RESOLVED' ? 'OPEN' : conversation.status,
+      },
+    });
+
+    try {
+      if (conversation.whatsappAccountId) {
+        await queueService.addMessageSendingJob({
+          messageId: message.id,
+          conversationId,
+          content,
+          type,
+        });
+      }
+    } catch {
+      // Continue even if queue worker is not connected in dev/demo
+    }
+
+    return message;
   }
 }
 

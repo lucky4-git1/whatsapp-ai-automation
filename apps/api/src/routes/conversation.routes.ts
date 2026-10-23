@@ -1,4 +1,5 @@
 import { FastifyInstance } from 'fastify';
+import { z } from 'zod';
 import { conversationService } from '../services/conversation.service';
 import {
   conversationFilterSchema,
@@ -141,6 +142,33 @@ export async function conversationRoutes(server: FastifyInstance) {
       return reply.status(201).send({
         success: true,
         data: { note },
+      });
+    }
+  );
+
+  // Send message
+  server.post(
+    '/:conversationId/messages',
+    { preHandler: [requirePermission(PERMISSIONS.CONVERSATION_REPLY)] },
+    async (request: AuthenticatedRequest, reply) => {
+      const { conversationId } = request.params as { conversationId: string };
+      const bodySchema = z.object({
+        content: z.string().min(1),
+        type: z.enum(['TEXT', 'IMAGE', 'DOCUMENT']).default('TEXT'),
+      });
+      const { content, type } = bodySchema.parse(request.body);
+
+      const message = await conversationService.sendMessage(
+        request.workspaceId!,
+        conversationId,
+        request.user!.id,
+        content,
+        type
+      );
+
+      return reply.status(201).send({
+        success: true,
+        data: { message },
       });
     }
   );

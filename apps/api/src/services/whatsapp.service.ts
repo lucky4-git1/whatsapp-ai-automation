@@ -1,5 +1,5 @@
 import { prisma } from '@whatsapp-automation/database';
-import { ERROR_CODES } from '@whatsapp-automation/shared';
+import { ERROR_CODES, encrypt, decrypt } from '@whatsapp-automation/shared';
 import { logger } from '@whatsapp-automation/observability';
 import {
   CloudApiProvider,
@@ -7,10 +7,6 @@ import {
   WebhookSignatureValidator,
 } from '@whatsapp-automation/whatsapp-provider';
 import type { ProcessedWebhookEvent } from '@whatsapp-automation/whatsapp-provider';
-import { createCipheriv, createDecipheriv, randomBytes } from 'crypto';
-
-const ENCRYPTION_KEY = Buffer.from(process.env.ENCRYPTION_KEY || '', 'hex');
-const ENCRYPTION_ALGORITHM = 'aes-256-cbc';
 
 export class WhatsAppService {
   private webhookHandler = new WebhookHandler();
@@ -454,22 +450,13 @@ export class WhatsAppService {
   }
 
   private encryptCredentials(text: string): string {
-    const iv = randomBytes(16);
-    const cipher = createCipheriv(ENCRYPTION_ALGORITHM, ENCRYPTION_KEY, iv);
-    let encrypted = cipher.update(text, 'utf8', 'hex');
-    encrypted += cipher.final('hex');
-    return iv.toString('hex') + ':' + encrypted;
+    return encrypt(text);
   }
 
   private decryptCredentials(encrypted: string): string {
-    const parts = encrypted.split(':');
-    const iv = Buffer.from(parts[0], 'hex');
-    const encryptedText = parts[1];
-    const decipher = createDecipheriv(ENCRYPTION_ALGORITHM, ENCRYPTION_KEY, iv);
-    let decrypted = decipher.update(encryptedText, 'hex', 'utf8');
-    decrypted += decipher.final('utf8');
-    return decrypted;
+    return decrypt(encrypted);
   }
 }
+
 
 export const whatsappService = new WhatsAppService();

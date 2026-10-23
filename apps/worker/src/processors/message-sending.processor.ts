@@ -7,6 +7,7 @@ import { Job } from 'bullmq';
 import { prisma } from '@whatsapp-automation/database';
 import { logger } from '@whatsapp-automation/observability';
 import { CloudApiProvider } from '@whatsapp-automation/whatsapp-provider';
+import { decrypt } from '@whatsapp-automation/shared';
 
 interface MessageSendingJobData {
   messageId: string;
@@ -53,7 +54,7 @@ export async function processMessageSending(job: Job<MessageSendingJobData>) {
       apiVersion: (whatsappAccount as any).apiVersion || 'v19.0',
       graphApiUrl: (whatsappAccount as any).graphApiUrl || 'https://graph.facebook.com',
       phoneNumberId: whatsappAccount.phoneNumberId,
-      accessToken: whatsappAccount.accessToken,
+      accessToken: decrypt(whatsappAccount.credentialsEncrypted || ''),
       businessAccountId: whatsappAccount.businessAccountId,
     });
 
