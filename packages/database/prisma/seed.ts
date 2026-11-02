@@ -118,6 +118,82 @@ async function main() {
     });
   }
 
+  // Approved Message Templates
+  const template1 = await prisma.messageTemplate.upsert({
+    where: {
+      whatsappAccountId_name_language: {
+        whatsappAccountId: waAccount.id,
+        name: 'seasonal_vip_promotion',
+        language: 'en',
+      },
+    },
+    update: {},
+    create: {
+      workspaceId: workspace.id,
+      whatsappAccountId: waAccount.id,
+      externalId: 'meta_tpl_901928301',
+      name: 'seasonal_vip_promotion',
+      category: 'MARKETING',
+      language: 'en',
+      status: 'APPROVED',
+      components: [
+        { type: 'HEADER', format: 'TEXT', text: 'Exclusive Enterprise Offer' },
+        { type: 'BODY', text: 'Hi {{1}}, upgrade your automation tier before the end of the quarter and receive 30% off additional WhatsApp Business numbers. Reply YES to claim.' },
+        { type: 'FOOTER', text: 'Reply STOP to unsubscribe' },
+        { type: 'BUTTONS', buttons: [{ type: 'QUICK_REPLY', text: 'Claim Discount' }] },
+      ],
+    },
+  });
+
+  const template2 = await prisma.messageTemplate.upsert({
+    where: {
+      whatsappAccountId_name_language: {
+        whatsappAccountId: waAccount.id,
+        name: 'appointment_confirmation',
+        language: 'en',
+      },
+    },
+    update: {},
+    create: {
+      workspaceId: workspace.id,
+      whatsappAccountId: waAccount.id,
+      externalId: 'meta_tpl_901928302',
+      name: 'appointment_confirmation',
+      category: 'UTILITY',
+      language: 'en',
+      status: 'APPROVED',
+      components: [
+        { type: 'BODY', text: 'Hello {{1}}, your demo session with {{2}} is confirmed for {{3}} at {{4}}. Please let us know if you need to reschedule.' },
+        { type: 'FOOTER', text: 'WhatsApp AI Customer Operations' },
+      ],
+    },
+  });
+
+  // Sample Campaign
+  const existingCamp = await prisma.campaign.findFirst({
+    where: { workspaceId: workspace.id, name: 'Q4 Enterprise VIP Outreach' },
+  });
+
+  if (!existingCamp) {
+    await prisma.campaign.create({
+      data: {
+        workspaceId: workspace.id,
+        templateId: template1.id,
+        name: 'Q4 Enterprise VIP Outreach',
+        description: 'Targeted broadcast to high-value enterprise pilot accounts',
+        status: 'COMPLETED',
+        totalRecipients: 2,
+        sentCount: 2,
+        deliveredCount: 2,
+        readCount: 1,
+        failedCount: 0,
+        audienceFilter: { tags: ['VIP'] },
+        startedAt: new Date(Date.now() - 172800000),
+        completedAt: new Date(Date.now() - 172700000),
+      },
+    });
+  }
+
   // Sample Contacts
   const contact1 = await prisma.contact.upsert({
     where: {

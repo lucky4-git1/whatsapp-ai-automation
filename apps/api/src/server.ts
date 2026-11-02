@@ -17,6 +17,8 @@ import { whatsappRoutes } from './routes/whatsapp.routes';
 import { aiRoutes } from './routes/ai.routes';
 import { workflowRoutes } from './routes/workflow.routes';
 import { healthRoutes } from './routes/health.routes';
+import { campaignRoutes } from './routes/campaign.routes';
+import { analyticsRoutes } from './routes/analytics.routes';
 
 export async function createServer() {
   const server = Fastify({
@@ -94,6 +96,8 @@ export async function createServer() {
   await server.register(whatsappRoutes, { prefix: '/api/v1/whatsapp' });
   await server.register(aiRoutes, { prefix: '/api/v1/ai' });
   await server.register(workflowRoutes, { prefix: '/api/v1/workflows' });
+  await server.register(campaignRoutes, { prefix: '/api/v1/campaigns' });
+  await server.register(analyticsRoutes, { prefix: '/api/v1/analytics' });
 
   return server;
 }

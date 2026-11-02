@@ -24,6 +24,17 @@ api.interceptors.request.use(
       config.headers['X-Workspace-Id'] = workspaceId;
     }
 
+    // Clean query params so empty strings don't fail enum validations
+    if (config.params && typeof config.params === 'object') {
+      const cleaned: Record<string, any> = {};
+      for (const [key, val] of Object.entries(config.params)) {
+        if (val !== '' && val !== null && val !== undefined) {
+          cleaned[key] = val;
+        }
+      }
+      config.params = cleaned;
+    }
+
     return config;
   },
   (error) => Promise.reject(error)
@@ -117,6 +128,28 @@ export const contactApi = {
     api.patch<ApiResponse>(`/api/v1/contacts/${id}`, data),
 
   delete: (id: string) => api.delete<ApiResponse>(`/api/v1/contacts/${id}`),
+
+  import: (contacts: any[]) =>
+    api.post<ApiResponse>('/api/v1/contacts/import', { contacts }),
+
+  export: () =>
+    api.get<ApiResponse>('/api/v1/contacts/export'),
+};
+
+// Campaign API
+export const campaignApi = {
+  list: () => api.get<ApiResponse>('/api/v1/campaigns'),
+  get: (id: string) => api.get<ApiResponse>(`/api/v1/campaigns/${id}`),
+  create: (data: any) => api.post<ApiResponse>('/api/v1/campaigns', data),
+  launch: (id: string) => api.post<ApiResponse>(`/api/v1/campaigns/${id}/launch`),
+  pause: (id: string) => api.post<ApiResponse>(`/api/v1/campaigns/${id}/pause`),
+  resume: (id: string) => api.post<ApiResponse>(`/api/v1/campaigns/${id}/resume`),
+  cancel: (id: string) => api.post<ApiResponse>(`/api/v1/campaigns/${id}/cancel`),
+};
+
+// Analytics API
+export const analyticsApi = {
+  getOverview: () => api.get<ApiResponse>('/api/v1/analytics/overview'),
 };
 
 // Conversation API
@@ -163,6 +196,9 @@ export const whatsappApi = {
 
   healthCheck: (id: string) =>
     api.get<ApiResponse>(`/api/v1/whatsapp/accounts/${id}/health`),
+
+  testMessage: (id: string, recipientPhone: string, message?: string) =>
+    api.post<ApiResponse>(`/api/v1/whatsapp/accounts/${id}/test-message`, { recipientPhone, message }),
 };
 
 // AI Copilot API
@@ -172,6 +208,15 @@ export const aiApi = {
 
   detectLanguage: (text: string) =>
     api.post<ApiResponse>('/api/v1/ai/detect-language', { text }),
+
+  generateCopy: (data: { objective?: string; tone?: string; product?: string; language?: string }) =>
+    api.post<ApiResponse>('/api/v1/ai/generate-copy', data),
+
+  translateTelugu: (text: string, targetLanguage?: string) =>
+    api.post<ApiResponse>('/api/v1/ai/translate-telugu', { text, targetLanguage }),
+
+  rewrite: (text: string, tone?: string) =>
+    api.post<ApiResponse>('/api/v1/ai/rewrite', { text, tone }),
 
   healthCheck: () =>
     api.get<ApiResponse>('/api/v1/ai/health'),

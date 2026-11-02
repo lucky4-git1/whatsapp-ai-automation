@@ -13,10 +13,10 @@ export const createContactSchema = z.object({
 export const updateContactSchema = createContactSchema.partial();
 
 export const contactFilterSchema = paginationSchema.extend({
-  search: z.string().optional(),
+  search: z.preprocess((val) => (val === '' ? undefined : val), z.string().optional()),
   tags: z.array(z.string()).optional(),
-  lifecycleStage: z.string().optional(),
-  consentStatus: z.enum(['EXPLICIT_OPT_IN', 'IMPLIED_OPT_IN', 'OPT_OUT', 'UNKNOWN']).optional(),
+  lifecycleStage: z.preprocess((val) => (val === '' ? undefined : val), z.string().optional()),
+  consentStatus: z.preprocess((val) => (val === '' ? undefined : val), z.enum(['EXPLICIT_OPT_IN', 'IMPLIED_OPT_IN', 'OPT_OUT', 'UNKNOWN']).optional()),
 });
 
 export const updateConsentSchema = z.object({

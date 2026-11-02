@@ -1,0 +1,687 @@
+{
+  "screens": [
+    {
+      "name": "01_login",
+      "route": "http://localhost:3000/login",
+      "title": "WhatsApp AI Automation",
+      "desktopScreenshot": "D:\\whatsapp-ai-automation-source\\docs\\screenshots\\01_login_desktop.png",
+      "mobileScreenshot": "D:\\whatsapp-ai-automation-source\\docs\\screenshots\\01_login_mobile.png",
+      "elements": {
+        "buttons": [
+          {
+            "text": "Sign In",
+            "disabled": false,
+            "classes": "btn btn-primary w-100"
+          },
+          {
+            "text": "Quick Launch Demo (Presentation Mode)",
+            "disabled": false,
+            "classes": "btn btn-outline-success btn-sm w-100 py-2 fw-medium"
+          }
+        ],
+        "links": [
+          {
+            "text": "Sign up",
+            "href": "/register"
+          }
+        ],
+        "inputs": [
+          {
+            "name": "email",
+            "type": "email",
+            "placeholder": ""
+          },
+          {
+            "name": "password",
+            "type": "password",
+            "placeholder": ""
+          }
+        ],
+        "headings": [
+          "WhatsApp AI Automation",
+          "Sign In"
+        ]
+      }
+    },
+    {
+      "name": "02_register",
+      "route": "http://localhost:3000/register",
+      "title": "WhatsApp AI Automation",
+      "desktopScreenshot": "D:\\whatsapp-ai-automation-source\\docs\\screenshots\\02_register_desktop.png",
+      "mobileScreenshot": "D:\\whatsapp-ai-automation-source\\docs\\screenshots\\02_register_mobile.png",
+      "elements": {
+        "buttons": [
+          {
+            "text": "Create Account",
+            "disabled": false,
+            "classes": "btn btn-primary w-100"
+          }
+        ],
+        "links": [
+          {
+            "text": "Sign in",
+            "href": "/login"
+          }
+        ],
+        "inputs": [
+          {
+            "name": "firstName",
+            "type": "text",
+            "placeholder": ""
+          },
+          {
+            "name": "lastName",
+            "type": "text",
+            "placeholder": ""
+          },
+          {
+            "name": "email",
+            "type": "email",
+            "placeholder": ""
+          },
+          {
+            "name": "password",
+            "type": "password",
+            "placeholder": ""
+          },
+          {
+            "name": "confirmPassword",
+            "type": "password",
+            "placeholder": ""
+          }
+        ],
+        "headings": [
+          "WhatsApp AI Automation",
+          "Create Account"
+        ]
+      }
+    },
+    {
+      "name": "03_dashboard",
+      "route": "http://localhost:3000/",
+      "title": "WhatsApp AI Automation",
+      "desktopScreenshot": "D:\\whatsapp-ai-automation-source\\docs\\screenshots\\03_dashboard_desktop.png",
+      "mobileScreenshot": "D:\\whatsapp-ai-automation-source\\docs\\screenshots\\03_dashboard_mobile.png",
+      "elements": {
+        "buttons": [
+          {
+            "text": "Close Sidebar",
+            "disabled": false,
+            "classes": "btn btn-link text-white-50 d-md-none p-0"
+          },
+          {
+            "text": "Toggle Navigation",
+            "disabled": false,
+            "classes": "btn btn-outline-secondary btn-sm d-md-none me-2"
+          },
+          {
+            "text": "AM\nAlex Mercer\nOWNER",
+            "disabled": false,
+            "classes": "btn btn-link text-dark text-decoration-none p-0"
+          }
+        ],
+        "links": [
+          {
+            "text": "Dashboard",
+            "href": "/"
+          },
+          {
+            "text": "Inbox",
+            "href": "/inbox"
+          },
+          {
+            "text": "Contacts",
+            "href": "/contacts"
+          },
+          {
+            "text": "Workflows",
+            "href": "/workflows"
+          },
+          {
+            "text": "WhatsApp",
+            "href": "/settings/whatsapp"
+          },
+          {
+            "text": "Team",
+            "href": "/settings/team"
+          },
+          {
+            "text": "Workspace",
+            "href": "/settings/workspace"
+          },
+          {
+            "text": "Total Conversations\n0",
+            "href": "/inbox"
+          },
+          {
+            "text": "Open Conversations\n0",
+            "href": "/inbox"
+          },
+          {
+            "text": "Total Contacts\n0",
+            "href": "/contacts"
+          },
+          {
+            "text": "WhatsApp Accounts\n0",
+            "href": "/settings/whatsapp"
+          },
+          {
+            "text": "View All",
+            "href": "/inbox"
+          },
+          {
+            "text": "Manage",
+            "href": "/settings/whatsapp"
+          },
+          {
+            "text": "Connect Account",
+            "href": "/settings/whatsapp"
+          },
+          {
+            "text": "Add Contact",
+            "href": "/contacts"
+          },
+          {
+            "text": "Invite Team Member",
+            "href": "/settings/team"
+          },
+          {
+            "text": "Sync Templates",
+            "href": "/settings/whatsapp"
+          }
+        ],
+        "inputs": [],
+        "headings": [
+          "Dashboard",
+          "0",
+          "0",
+          "0",
+          "0"
+        ]
+      }
+    },
+    {
+      "name": "04_inbox",
+      "route": "http://localhost:3000/inbox",
+      "title": "WhatsApp AI Automation",
+      "desktopScreenshot": "D:\\whatsapp-ai-automation-source\\docs\\screenshots\\04_inbox_desktop.png",
+      "mobileScreenshot": "D:\\whatsapp-ai-automation-source\\docs\\screenshots\\04_inbox_mobile.png",
+      "elements": {
+        "buttons": [
+          {
+            "text": "Close Sidebar",
+            "disabled": false,
+            "classes": "btn btn-link text-white-50 d-md-none p-0"
+          },
+          {
+            "text": "Toggle Navigation",
+            "disabled": false,
+            "classes": "btn btn-outline-secondary btn-sm d-md-none me-2"
+          },
+          {
+            "text": "AM\nAlex Mercer\nOWNER",
+            "disabled": false,
+            "classes": "btn btn-link text-dark text-decoration-none p-0"
+          },
+          {
+            "text": "All",
+            "disabled": false,
+            "classes": "btn btn-sm btn-primary"
+          },
+          {
+            "text": "Open",
+            "disabled": false,
+            "classes": "btn btn-sm btn-outline-primary"
+          },
+          {
+            "text": "Assigned",
+            "disabled": false,
+            "classes": "btn btn-sm btn-outline-primary"
+          }
+        ],
+        "links": [
+          {
+            "text": "Dashboard",
+            "href": "/"
+          },
+          {
+            "text": "Inbox",
+            "href": "/inbox"
+          },
+          {
+            "text": "Contacts",
+            "href": "/contacts"
+          },
+          {
+            "text": "Workflows",
+            "href": "/workflows"
+          },
+          {
+            "text": "WhatsApp",
+            "href": "/settings/whatsapp"
+          },
+          {
+            "text": "Team",
+            "href": "/settings/team"
+          },
+          {
+            "text": "Workspace",
+            "href": "/settings/workspace"
+          }
+        ],
+        "inputs": [
+          {
+            "name": "INPUT",
+            "type": "text",
+            "placeholder": "Search conversations..."
+          }
+        ],
+        "headings": [
+          "Inbox"
+        ]
+      }
+    },
+    {
+      "name": "05_contacts",
+      "route": "http://localhost:3000/contacts",
+      "title": "WhatsApp AI Automation",
+      "desktopScreenshot": "D:\\whatsapp-ai-automation-source\\docs\\screenshots\\05_contacts_desktop.png",
+      "mobileScreenshot": "D:\\whatsapp-ai-automation-source\\docs\\screenshots\\05_contacts_mobile.png",
+      "elements": {
+        "buttons": [
+          {
+            "text": "Close Sidebar",
+            "disabled": false,
+            "classes": "btn btn-link text-white-50 d-md-none p-0"
+          },
+          {
+            "text": "Toggle Navigation",
+            "disabled": false,
+            "classes": "btn btn-outline-secondary btn-sm d-md-none me-2"
+          },
+          {
+            "text": "AM\nAlex Mercer\nOWNER",
+            "disabled": false,
+            "classes": "btn btn-link text-dark text-decoration-none p-0"
+          },
+          {
+            "text": "Add Contact",
+            "disabled": false,
+            "classes": "btn btn-primary"
+          }
+        ],
+        "links": [
+          {
+            "text": "Dashboard",
+            "href": "/"
+          },
+          {
+            "text": "Inbox",
+            "href": "/inbox"
+          },
+          {
+            "text": "Contacts",
+            "href": "/contacts"
+          },
+          {
+            "text": "Workflows",
+            "href": "/workflows"
+          },
+          {
+            "text": "WhatsApp",
+            "href": "/settings/whatsapp"
+          },
+          {
+            "text": "Team",
+            "href": "/settings/team"
+          },
+          {
+            "text": "Workspace",
+            "href": "/settings/workspace"
+          }
+        ],
+        "inputs": [
+          {
+            "name": "INPUT",
+            "type": "text",
+            "placeholder": "Search contacts..."
+          }
+        ],
+        "headings": [
+          "Contacts"
+        ]
+      }
+    },
+    {
+      "name": "06_workflows",
+      "route": "http://localhost:3000/workflows",
+      "title": "WhatsApp AI Automation",
+      "desktopScreenshot": "D:\\whatsapp-ai-automation-source\\docs\\screenshots\\06_workflows_desktop.png",
+      "mobileScreenshot": "D:\\whatsapp-ai-automation-source\\docs\\screenshots\\06_workflows_mobile.png",
+      "elements": {
+        "buttons": [
+          {
+            "text": "Close Sidebar",
+            "disabled": false,
+            "classes": "btn btn-link text-white-50 d-md-none p-0"
+          },
+          {
+            "text": "Toggle Navigation",
+            "disabled": false,
+            "classes": "btn btn-outline-secondary btn-sm d-md-none me-2"
+          },
+          {
+            "text": "AM\nAlex Mercer\nOWNER",
+            "disabled": false,
+            "classes": "btn btn-link text-dark text-decoration-none p-0"
+          },
+          {
+            "text": "Create Workflow",
+            "disabled": false,
+            "classes": "btn btn-primary d-inline-flex align-items-center"
+          }
+        ],
+        "links": [
+          {
+            "text": "Dashboard",
+            "href": "/"
+          },
+          {
+            "text": "Inbox",
+            "href": "/inbox"
+          },
+          {
+            "text": "Contacts",
+            "href": "/contacts"
+          },
+          {
+            "text": "Workflows",
+            "href": "/workflows"
+          },
+          {
+            "text": "WhatsApp",
+            "href": "/settings/whatsapp"
+          },
+          {
+            "text": "Team",
+            "href": "/settings/team"
+          },
+          {
+            "text": "Workspace",
+            "href": "/settings/workspace"
+          }
+        ],
+        "inputs": [],
+        "headings": [
+          "Workflows & Automations",
+          "0",
+          "0",
+          "0"
+        ]
+      }
+    },
+    {
+      "name": "07_settings_whatsapp",
+      "route": "http://localhost:3000/settings/whatsapp",
+      "title": "WhatsApp AI Automation",
+      "desktopScreenshot": "D:\\whatsapp-ai-automation-source\\docs\\screenshots\\07_settings_whatsapp_desktop.png",
+      "mobileScreenshot": "D:\\whatsapp-ai-automation-source\\docs\\screenshots\\07_settings_whatsapp_mobile.png",
+      "elements": {
+        "buttons": [
+          {
+            "text": "Close Sidebar",
+            "disabled": false,
+            "classes": "btn btn-link text-white-50 d-md-none p-0"
+          },
+          {
+            "text": "Toggle Navigation",
+            "disabled": false,
+            "classes": "btn btn-outline-secondary btn-sm d-md-none me-2"
+          },
+          {
+            "text": "AM\nAlex Mercer\nOWNER",
+            "disabled": false,
+            "classes": "btn btn-link text-dark text-decoration-none p-0"
+          },
+          {
+            "text": "Connect Account",
+            "disabled": false,
+            "classes": "btn btn-primary"
+          }
+        ],
+        "links": [
+          {
+            "text": "Dashboard",
+            "href": "/"
+          },
+          {
+            "text": "Inbox",
+            "href": "/inbox"
+          },
+          {
+            "text": "Contacts",
+            "href": "/contacts"
+          },
+          {
+            "text": "Workflows",
+            "href": "/workflows"
+          },
+          {
+            "text": "WhatsApp",
+            "href": "/settings/whatsapp"
+          },
+          {
+            "text": "Team",
+            "href": "/settings/team"
+          },
+          {
+            "text": "Workspace",
+            "href": "/settings/workspace"
+          }
+        ],
+        "inputs": [],
+        "headings": [
+          "WhatsApp Accounts"
+        ]
+      }
+    },
+    {
+      "name": "08_settings_workspace",
+      "route": "http://localhost:3000/settings/workspace",
+      "title": "WhatsApp AI Automation",
+      "desktopScreenshot": "D:\\whatsapp-ai-automation-source\\docs\\screenshots\\08_settings_workspace_desktop.png",
+      "mobileScreenshot": "D:\\whatsapp-ai-automation-source\\docs\\screenshots\\08_settings_workspace_mobile.png",
+      "elements": {
+        "buttons": [
+          {
+            "text": "Close Sidebar",
+            "disabled": false,
+            "classes": "btn btn-link text-white-50 d-md-none p-0"
+          },
+          {
+            "text": "Toggle Navigation",
+            "disabled": false,
+            "classes": "btn btn-outline-secondary btn-sm d-md-none me-2"
+          },
+          {
+            "text": "AM\nAlex Mercer\nOWNER",
+            "disabled": false,
+            "classes": "btn btn-link text-dark text-decoration-none p-0"
+          },
+          {
+            "text": "Button",
+            "disabled": false,
+            "classes": "btn btn-outline-secondary"
+          },
+          {
+            "text": "Save Workspace Settings",
+            "disabled": false,
+            "classes": "btn btn-primary px-4 py-2"
+          }
+        ],
+        "links": [
+          {
+            "text": "Dashboard",
+            "href": "/"
+          },
+          {
+            "text": "Inbox",
+            "href": "/inbox"
+          },
+          {
+            "text": "Contacts",
+            "href": "/contacts"
+          },
+          {
+            "text": "Workflows",
+            "href": "/workflows"
+          },
+          {
+            "text": "WhatsApp",
+            "href": "/settings/whatsapp"
+          },
+          {
+            "text": "Team",
+            "href": "/settings/team"
+          },
+          {
+            "text": "Workspace",
+            "href": "/settings/workspace"
+          }
+        ],
+        "inputs": [
+          {
+            "name": "INPUT",
+            "type": "text",
+            "placeholder": ""
+          },
+          {
+            "name": "SELECT",
+            "type": "select",
+            "placeholder": ""
+          },
+          {
+            "name": "SELECT",
+            "type": "select",
+            "placeholder": ""
+          },
+          {
+            "name": "INPUT",
+            "type": "text",
+            "placeholder": ""
+          },
+          {
+            "name": "aiEnabledSwitch",
+            "type": "checkbox",
+            "placeholder": ""
+          },
+          {
+            "name": "SELECT",
+            "type": "select",
+            "placeholder": ""
+          },
+          {
+            "name": "SELECT",
+            "type": "select",
+            "placeholder": ""
+          },
+          {
+            "name": "INPUT",
+            "type": "range",
+            "placeholder": ""
+          },
+          {
+            "name": "INPUT",
+            "type": "text",
+            "placeholder": ""
+          }
+        ],
+        "headings": [
+          "Workspace Settings"
+        ]
+      }
+    },
+    {
+      "name": "09_settings_team",
+      "route": "http://localhost:3000/settings/team",
+      "title": "WhatsApp AI Automation",
+      "desktopScreenshot": "D:\\whatsapp-ai-automation-source\\docs\\screenshots\\09_settings_team_desktop.png",
+      "mobileScreenshot": "D:\\whatsapp-ai-automation-source\\docs\\screenshots\\09_settings_team_mobile.png",
+      "elements": {
+        "buttons": [
+          {
+            "text": "Close Sidebar",
+            "disabled": false,
+            "classes": "btn btn-link text-white-50 d-md-none p-0"
+          },
+          {
+            "text": "Toggle Navigation",
+            "disabled": false,
+            "classes": "btn btn-outline-secondary btn-sm d-md-none me-2"
+          },
+          {
+            "text": "AM\nAlex Mercer\nOWNER",
+            "disabled": false,
+            "classes": "btn btn-link text-dark text-decoration-none p-0"
+          },
+          {
+            "text": "Invite Member",
+            "disabled": false,
+            "classes": "btn btn-primary"
+          },
+          {
+            "text": "Button",
+            "disabled": false,
+            "classes": "btn btn-sm btn-outline-danger"
+          },
+          {
+            "text": "Button",
+            "disabled": false,
+            "classes": "btn btn-sm btn-outline-danger"
+          },
+          {
+            "text": "Button",
+            "disabled": false,
+            "classes": "btn btn-sm btn-outline-danger"
+          }
+        ],
+        "links": [
+          {
+            "text": "Dashboard",
+            "href": "/"
+          },
+          {
+            "text": "Inbox",
+            "href": "/inbox"
+          },
+          {
+            "text": "Contacts",
+            "href": "/contacts"
+          },
+          {
+            "text": "Workflows",
+            "href": "/workflows"
+          },
+          {
+            "text": "WhatsApp",
+            "href": "/settings/whatsapp"
+          },
+          {
+            "text": "Team",
+            "href": "/settings/team"
+          },
+          {
+            "text": "Workspace",
+            "href": "/settings/workspace"
+          }
+        ],
+        "inputs": [],
+        "headings": [
+          "Team Members"
+        ]
+      }
+    }
+  ],
+  "consoleErrors": [],
+  "networkErrors": []
+}

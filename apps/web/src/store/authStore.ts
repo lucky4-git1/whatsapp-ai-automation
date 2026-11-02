@@ -34,10 +34,22 @@ interface AuthState {
   setWorkspace: (workspaceId: string) => void;
 }
 
+const getInitialUser = (): User | null => {
+  try {
+    const saved = typeof window !== 'undefined' ? localStorage.getItem('user') : null;
+    return saved ? JSON.parse(saved) : null;
+  } catch {
+    return null;
+  }
+};
+
+const initialUser = getInitialUser();
+const initialToken = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+
 export const useAuthStore = create<AuthState>((set, get) => ({
-  user: null,
-  token: localStorage.getItem('token'),
-  isLoading: true,
+  user: initialUser,
+  token: initialToken,
+  isLoading: !initialUser && !!initialToken,
   error: null,
 
   login: async (email: string, password: string) => {

@@ -10,10 +10,10 @@ export const sendMessageSchema = z.object({
 });
 
 export const conversationFilterSchema = paginationSchema.extend({
-  status: z.enum(['OPEN', 'PENDING', 'ASSIGNED', 'WAITING_CUSTOMER', 'ESCALATED', 'RESOLVED', 'ARCHIVED']).optional(),
-  assignedTo: z.string().uuid().optional(),
-  priority: z.enum(['LOW', 'NORMAL', 'HIGH', 'URGENT']).optional(),
-  search: z.string().optional(),
+  status: z.preprocess((val) => (val === '' ? undefined : val), z.enum(['OPEN', 'PENDING', 'ASSIGNED', 'WAITING_CUSTOMER', 'ESCALATED', 'RESOLVED', 'ARCHIVED']).optional()),
+  assignedTo: z.preprocess((val) => (val === '' ? undefined : val), z.string().uuid().optional()),
+  priority: z.preprocess((val) => (val === '' ? undefined : val), z.enum(['LOW', 'NORMAL', 'HIGH', 'URGENT']).optional()),
+  search: z.preprocess((val) => (val === '' ? undefined : val), z.string().optional()),
 });
 
 export const assignConversationSchema = z.object({
