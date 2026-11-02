@@ -19,13 +19,13 @@ async function start() {
     root: webRoot,
     configFile: path.join(webRoot, 'vite.config.ts'),
     server: {
-      port: 3000,
+      port: 3020,
       host: '0.0.0.0',
     },
   });
 
   await server.listen();
-  console.log(`Vite development server active at http://localhost:3000/`);
+  console.log(`Vite development server active at http://localhost:3020/`);
 
   // Explicitly prevent Node event loop from exiting
   setInterval(() => {}, 1000 * 60 * 60);
