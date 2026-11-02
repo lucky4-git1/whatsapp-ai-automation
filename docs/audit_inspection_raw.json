@@ -117,36 +117,52 @@
           {
             "text": "AM\nAlex Mercer\nOWNER",
             "disabled": false,
-            "classes": "btn btn-link text-dark text-decoration-none p-0"
+            "classes": "btn btn-light border text-dark text-decoration-none py-1 px-3 rounded-pill"
           }
         ],
         "links": [
           {
-            "text": "Dashboard",
+            "text": "Overview",
             "href": "/"
           },
           {
-            "text": "Inbox",
+            "text": "Shared Inbox",
             "href": "/inbox"
           },
           {
-            "text": "Contacts",
+            "text": "Contacts CRM",
             "href": "/contacts"
           },
           {
-            "text": "Workflows",
-            "href": "/workflows"
+            "text": "Audiences",
+            "href": "/audiences"
           },
           {
-            "text": "WhatsApp",
-            "href": "/settings/whatsapp"
+            "text": "Campaigns",
+            "href": "/campaigns"
           },
           {
-            "text": "Team",
-            "href": "/settings/team"
+            "text": "Automation",
+            "href": "/automation"
           },
           {
-            "text": "Workspace",
+            "text": "Templates",
+            "href": "/templates"
+          },
+          {
+            "text": "AI Studio",
+            "href": "/ai-studio"
+          },
+          {
+            "text": "Analytics",
+            "href": "/analytics"
+          },
+          {
+            "text": "WhatsApp Connections",
+            "href": "/connections"
+          },
+          {
+            "text": "Settings",
             "href": "/settings/workspace"
           },
           {
@@ -221,7 +237,7 @@
           {
             "text": "AM\nAlex Mercer\nOWNER",
             "disabled": false,
-            "classes": "btn btn-link text-dark text-decoration-none p-0"
+            "classes": "btn btn-light border text-dark text-decoration-none py-1 px-3 rounded-pill"
           },
           {
             "text": "All",
@@ -241,31 +257,47 @@
         ],
         "links": [
           {
-            "text": "Dashboard",
+            "text": "Overview",
             "href": "/"
           },
           {
-            "text": "Inbox",
+            "text": "Shared Inbox",
             "href": "/inbox"
           },
           {
-            "text": "Contacts",
+            "text": "Contacts CRM",
             "href": "/contacts"
           },
           {
-            "text": "Workflows",
-            "href": "/workflows"
+            "text": "Audiences",
+            "href": "/audiences"
           },
           {
-            "text": "WhatsApp",
-            "href": "/settings/whatsapp"
+            "text": "Campaigns",
+            "href": "/campaigns"
           },
           {
-            "text": "Team",
-            "href": "/settings/team"
+            "text": "Automation",
+            "href": "/automation"
           },
           {
-            "text": "Workspace",
+            "text": "Templates",
+            "href": "/templates"
+          },
+          {
+            "text": "AI Studio",
+            "href": "/ai-studio"
+          },
+          {
+            "text": "Analytics",
+            "href": "/analytics"
+          },
+          {
+            "text": "WhatsApp Connections",
+            "href": "/connections"
+          },
+          {
+            "text": "Settings",
             "href": "/settings/workspace"
           }
         ],
@@ -302,7 +334,17 @@
           {
             "text": "AM\nAlex Mercer\nOWNER",
             "disabled": false,
-            "classes": "btn btn-link text-dark text-decoration-none p-0"
+            "classes": "btn btn-light border text-dark text-decoration-none py-1 px-3 rounded-pill"
+          },
+          {
+            "text": "Export CSV",
+            "disabled": false,
+            "classes": "btn btn-outline-secondary"
+          },
+          {
+            "text": "Import Wizard",
+            "disabled": false,
+            "classes": "btn btn-outline-success"
           },
           {
             "text": "Add Contact",
@@ -312,31 +354,47 @@
         ],
         "links": [
           {
-            "text": "Dashboard",
+            "text": "Overview",
             "href": "/"
           },
           {
-            "text": "Inbox",
+            "text": "Shared Inbox",
             "href": "/inbox"
           },
           {
-            "text": "Contacts",
+            "text": "Contacts CRM",
             "href": "/contacts"
           },
           {
-            "text": "Workflows",
-            "href": "/workflows"
+            "text": "Audiences",
+            "href": "/audiences"
           },
           {
-            "text": "WhatsApp",
-            "href": "/settings/whatsapp"
+            "text": "Campaigns",
+            "href": "/campaigns"
           },
           {
-            "text": "Team",
-            "href": "/settings/team"
+            "text": "Automation",
+            "href": "/automation"
           },
           {
-            "text": "Workspace",
+            "text": "Templates",
+            "href": "/templates"
+          },
+          {
+            "text": "AI Studio",
+            "href": "/ai-studio"
+          },
+          {
+            "text": "Analytics",
+            "href": "/analytics"
+          },
+          {
+            "text": "WhatsApp Connections",
+            "href": "/connections"
+          },
+          {
+            "text": "Settings",
             "href": "/settings/workspace"
           }
         ],
@@ -344,11 +402,16 @@
           {
             "name": "INPUT",
             "type": "text",
-            "placeholder": "Search contacts..."
+            "placeholder": "Search by name, phone or email..."
+          },
+          {
+            "name": "SELECT",
+            "type": "select",
+            "placeholder": ""
           }
         ],
         "headings": [
-          "Contacts"
+          "Customer Contacts"
         ]
       }
     },
@@ -373,7 +436,7 @@
           {
             "text": "AM\nAlex Mercer\nOWNER",
             "disabled": false,
-            "classes": "btn btn-link text-dark text-decoration-none p-0"
+            "classes": "btn btn-light border text-dark text-decoration-none py-1 px-3 rounded-pill"
           },
           {
             "text": "Create Workflow",
@@ -383,31 +446,47 @@
         ],
         "links": [
           {
-            "text": "Dashboard",
+            "text": "Overview",
             "href": "/"
           },
           {
-            "text": "Inbox",
+            "text": "Shared Inbox",
             "href": "/inbox"
           },
           {
-            "text": "Contacts",
+            "text": "Contacts CRM",
             "href": "/contacts"
           },
           {
-            "text": "Workflows",
-            "href": "/workflows"
+            "text": "Audiences",
+            "href": "/audiences"
           },
           {
-            "text": "WhatsApp",
-            "href": "/settings/whatsapp"
+            "text": "Campaigns",
+            "href": "/campaigns"
           },
           {
-            "text": "Team",
-            "href": "/settings/team"
+            "text": "Automation",
+            "href": "/automation"
           },
           {
-            "text": "Workspace",
+            "text": "Templates",
+            "href": "/templates"
+          },
+          {
+            "text": "AI Studio",
+            "href": "/ai-studio"
+          },
+          {
+            "text": "Analytics",
+            "href": "/analytics"
+          },
+          {
+            "text": "WhatsApp Connections",
+            "href": "/connections"
+          },
+          {
+            "text": "Settings",
             "href": "/settings/workspace"
           }
         ],
@@ -421,11 +500,11 @@
       }
     },
     {
-      "name": "07_settings_whatsapp",
-      "route": "http://localhost:3000/settings/whatsapp",
+      "name": "07_campaigns",
+      "route": "http://localhost:3000/campaigns",
       "title": "WhatsApp AI Automation",
-      "desktopScreenshot": "D:\\whatsapp-ai-automation-source\\docs\\screenshots\\07_settings_whatsapp_desktop.png",
-      "mobileScreenshot": "D:\\whatsapp-ai-automation-source\\docs\\screenshots\\07_settings_whatsapp_mobile.png",
+      "desktopScreenshot": "D:\\whatsapp-ai-automation-source\\docs\\screenshots\\07_campaigns_desktop.png",
+      "mobileScreenshot": "D:\\whatsapp-ai-automation-source\\docs\\screenshots\\07_campaigns_mobile.png",
       "elements": {
         "buttons": [
           {
@@ -441,56 +520,404 @@
           {
             "text": "AM\nAlex Mercer\nOWNER",
             "disabled": false,
-            "classes": "btn btn-link text-dark text-decoration-none p-0"
+            "classes": "btn btn-light border text-dark text-decoration-none py-1 px-3 rounded-pill"
           },
           {
-            "text": "Connect Account",
+            "text": "Create Campaign",
             "disabled": false,
-            "classes": "btn btn-primary"
+            "classes": "btn btn-success d-flex align-items-center gap-2"
           }
         ],
         "links": [
           {
-            "text": "Dashboard",
+            "text": "Overview",
             "href": "/"
           },
           {
-            "text": "Inbox",
+            "text": "Shared Inbox",
             "href": "/inbox"
           },
           {
-            "text": "Contacts",
+            "text": "Contacts CRM",
             "href": "/contacts"
           },
           {
-            "text": "Workflows",
-            "href": "/workflows"
+            "text": "Audiences",
+            "href": "/audiences"
           },
           {
-            "text": "WhatsApp",
-            "href": "/settings/whatsapp"
+            "text": "Campaigns",
+            "href": "/campaigns"
           },
           {
-            "text": "Team",
-            "href": "/settings/team"
+            "text": "Automation",
+            "href": "/automation"
           },
           {
-            "text": "Workspace",
+            "text": "Templates",
+            "href": "/templates"
+          },
+          {
+            "text": "AI Studio",
+            "href": "/ai-studio"
+          },
+          {
+            "text": "Analytics",
+            "href": "/analytics"
+          },
+          {
+            "text": "WhatsApp Connections",
+            "href": "/connections"
+          },
+          {
+            "text": "Settings",
+            "href": "/settings/workspace"
+          }
+        ],
+        "inputs": [
+          {
+            "name": "SELECT",
+            "type": "select",
+            "placeholder": ""
+          }
+        ],
+        "headings": [
+          "Broadcast Campaigns",
+          "0",
+          "0",
+          "0",
+          "0.0%"
+        ]
+      }
+    },
+    {
+      "name": "08_audiences",
+      "route": "http://localhost:3000/audiences",
+      "title": "WhatsApp AI Automation",
+      "desktopScreenshot": "D:\\whatsapp-ai-automation-source\\docs\\screenshots\\08_audiences_desktop.png",
+      "mobileScreenshot": "D:\\whatsapp-ai-automation-source\\docs\\screenshots\\08_audiences_mobile.png",
+      "elements": {
+        "buttons": [
+          {
+            "text": "Close Sidebar",
+            "disabled": false,
+            "classes": "btn btn-link text-white-50 d-md-none p-0"
+          },
+          {
+            "text": "Toggle Navigation",
+            "disabled": false,
+            "classes": "btn btn-outline-secondary btn-sm d-md-none me-2"
+          },
+          {
+            "text": "AM\nAlex Mercer\nOWNER",
+            "disabled": false,
+            "classes": "btn btn-light border text-dark text-decoration-none py-1 px-3 rounded-pill"
+          },
+          {
+            "text": "Launch Broadcast to Segment",
+            "disabled": false,
+            "classes": "btn btn-success"
+          },
+          {
+            "text": "Broadcast",
+            "disabled": false,
+            "classes": "btn btn-sm btn-outline-success"
+          },
+          {
+            "text": "Broadcast",
+            "disabled": false,
+            "classes": "btn btn-sm btn-outline-success"
+          }
+        ],
+        "links": [
+          {
+            "text": "Overview",
+            "href": "/"
+          },
+          {
+            "text": "Shared Inbox",
+            "href": "/inbox"
+          },
+          {
+            "text": "Contacts CRM",
+            "href": "/contacts"
+          },
+          {
+            "text": "Audiences",
+            "href": "/audiences"
+          },
+          {
+            "text": "Campaigns",
+            "href": "/campaigns"
+          },
+          {
+            "text": "Automation",
+            "href": "/automation"
+          },
+          {
+            "text": "Templates",
+            "href": "/templates"
+          },
+          {
+            "text": "AI Studio",
+            "href": "/ai-studio"
+          },
+          {
+            "text": "Analytics",
+            "href": "/analytics"
+          },
+          {
+            "text": "WhatsApp Connections",
+            "href": "/connections"
+          },
+          {
+            "text": "Settings",
+            "href": "/settings/workspace"
+          },
+          {
+            "text": "Review",
+            "href": "/contacts"
+          },
+          {
+            "text": "Review",
+            "href": "/contacts"
+          }
+        ],
+        "inputs": [],
+        "headings": [
+          "Audience Segments & Cohorts"
+        ]
+      }
+    },
+    {
+      "name": "09_ai_studio",
+      "route": "http://localhost:3000/ai-studio",
+      "title": "WhatsApp AI Automation",
+      "desktopScreenshot": "D:\\whatsapp-ai-automation-source\\docs\\screenshots\\09_ai_studio_desktop.png",
+      "mobileScreenshot": "D:\\whatsapp-ai-automation-source\\docs\\screenshots\\09_ai_studio_mobile.png",
+      "elements": {
+        "buttons": [
+          {
+            "text": "Close Sidebar",
+            "disabled": false,
+            "classes": "btn btn-link text-white-50 d-md-none p-0"
+          },
+          {
+            "text": "Toggle Navigation",
+            "disabled": false,
+            "classes": "btn btn-outline-secondary btn-sm d-md-none me-2"
+          },
+          {
+            "text": "AM\nAlex Mercer\nOWNER",
+            "disabled": false,
+            "classes": "btn btn-light border text-dark text-decoration-none py-1 px-3 rounded-pill"
+          },
+          {
+            "text": "Promotional Copy Generator",
+            "disabled": false,
+            "classes": "nav-link active bg-primary"
+          },
+          {
+            "text": "Message Rewriter & Polisher",
+            "disabled": false,
+            "classes": "nav-link bg-white text-dark border"
+          },
+          {
+            "text": "Telugu & English Translation",
+            "disabled": false,
+            "classes": "nav-link bg-white text-dark border"
+          },
+          {
+            "text": "Intent & Lead Scoring Rules",
+            "disabled": false,
+            "classes": "nav-link bg-white text-dark border"
+          },
+          {
+            "text": "Generate WhatsApp Broadcast Copy",
+            "disabled": false,
+            "classes": "btn btn-primary w-100"
+          }
+        ],
+        "links": [
+          {
+            "text": "Overview",
+            "href": "/"
+          },
+          {
+            "text": "Shared Inbox",
+            "href": "/inbox"
+          },
+          {
+            "text": "Contacts CRM",
+            "href": "/contacts"
+          },
+          {
+            "text": "Audiences",
+            "href": "/audiences"
+          },
+          {
+            "text": "Campaigns",
+            "href": "/campaigns"
+          },
+          {
+            "text": "Automation",
+            "href": "/automation"
+          },
+          {
+            "text": "Templates",
+            "href": "/templates"
+          },
+          {
+            "text": "AI Studio",
+            "href": "/ai-studio"
+          },
+          {
+            "text": "Analytics",
+            "href": "/analytics"
+          },
+          {
+            "text": "WhatsApp Connections",
+            "href": "/connections"
+          },
+          {
+            "text": "Settings",
+            "href": "/settings/workspace"
+          }
+        ],
+        "inputs": [
+          {
+            "name": "INPUT",
+            "type": "text",
+            "placeholder": ""
+          },
+          {
+            "name": "TEXTAREA",
+            "type": "textarea",
+            "placeholder": "e.g. Announce a 24-hour flash sale for premium customers"
+          },
+          {
+            "name": "SELECT",
+            "type": "select",
+            "placeholder": ""
+          },
+          {
+            "name": "SELECT",
+            "type": "select",
+            "placeholder": ""
+          }
+        ],
+        "headings": [
+          "AI Studio & Assistant"
+        ]
+      }
+    },
+    {
+      "name": "10_templates",
+      "route": "http://localhost:3000/templates",
+      "title": "WhatsApp AI Automation",
+      "desktopScreenshot": "D:\\whatsapp-ai-automation-source\\docs\\screenshots\\10_templates_desktop.png",
+      "mobileScreenshot": "D:\\whatsapp-ai-automation-source\\docs\\screenshots\\10_templates_mobile.png",
+      "elements": {
+        "buttons": [
+          {
+            "text": "Close Sidebar",
+            "disabled": false,
+            "classes": "btn btn-link text-white-50 d-md-none p-0"
+          },
+          {
+            "text": "Toggle Navigation",
+            "disabled": false,
+            "classes": "btn btn-outline-secondary btn-sm d-md-none me-2"
+          },
+          {
+            "text": "AM\nAlex Mercer\nOWNER",
+            "disabled": false,
+            "classes": "btn btn-light border text-dark text-decoration-none py-1 px-3 rounded-pill"
+          },
+          {
+            "text": "Sync from Meta",
+            "disabled": true,
+            "classes": "btn btn-primary btn-sm"
+          },
+          {
+            "text": "ALL",
+            "disabled": false,
+            "classes": "btn btn-primary"
+          },
+          {
+            "text": "MARKETING",
+            "disabled": false,
+            "classes": "btn btn-outline-secondary"
+          },
+          {
+            "text": "UTILITY",
+            "disabled": false,
+            "classes": "btn btn-outline-secondary"
+          },
+          {
+            "text": "AUTHENTICATION",
+            "disabled": false,
+            "classes": "btn btn-outline-secondary"
+          }
+        ],
+        "links": [
+          {
+            "text": "Overview",
+            "href": "/"
+          },
+          {
+            "text": "Shared Inbox",
+            "href": "/inbox"
+          },
+          {
+            "text": "Contacts CRM",
+            "href": "/contacts"
+          },
+          {
+            "text": "Audiences",
+            "href": "/audiences"
+          },
+          {
+            "text": "Campaigns",
+            "href": "/campaigns"
+          },
+          {
+            "text": "Automation",
+            "href": "/automation"
+          },
+          {
+            "text": "Templates",
+            "href": "/templates"
+          },
+          {
+            "text": "AI Studio",
+            "href": "/ai-studio"
+          },
+          {
+            "text": "Analytics",
+            "href": "/analytics"
+          },
+          {
+            "text": "WhatsApp Connections",
+            "href": "/connections"
+          },
+          {
+            "text": "Settings",
             "href": "/settings/workspace"
           }
         ],
         "inputs": [],
         "headings": [
-          "WhatsApp Accounts"
+          "Message Templates"
         ]
       }
     },
     {
-      "name": "08_settings_workspace",
-      "route": "http://localhost:3000/settings/workspace",
+      "name": "11_analytics",
+      "route": "http://localhost:3000/analytics",
       "title": "WhatsApp AI Automation",
-      "desktopScreenshot": "D:\\whatsapp-ai-automation-source\\docs\\screenshots\\08_settings_workspace_desktop.png",
-      "mobileScreenshot": "D:\\whatsapp-ai-automation-source\\docs\\screenshots\\08_settings_workspace_mobile.png",
+      "desktopScreenshot": "D:\\whatsapp-ai-automation-source\\docs\\screenshots\\11_analytics_desktop.png",
+      "mobileScreenshot": "D:\\whatsapp-ai-automation-source\\docs\\screenshots\\11_analytics_mobile.png",
       "elements": {
         "buttons": [
           {
@@ -506,7 +933,196 @@
           {
             "text": "AM\nAlex Mercer\nOWNER",
             "disabled": false,
-            "classes": "btn btn-link text-dark text-decoration-none p-0"
+            "classes": "btn btn-light border text-dark text-decoration-none py-1 px-3 rounded-pill"
+          },
+          {
+            "text": "Refresh",
+            "disabled": false,
+            "classes": "btn btn-outline-secondary btn-sm"
+          },
+          {
+            "text": "Export CSV",
+            "disabled": false,
+            "classes": "btn btn-primary btn-sm"
+          }
+        ],
+        "links": [
+          {
+            "text": "Overview",
+            "href": "/"
+          },
+          {
+            "text": "Shared Inbox",
+            "href": "/inbox"
+          },
+          {
+            "text": "Contacts CRM",
+            "href": "/contacts"
+          },
+          {
+            "text": "Audiences",
+            "href": "/audiences"
+          },
+          {
+            "text": "Campaigns",
+            "href": "/campaigns"
+          },
+          {
+            "text": "Automation",
+            "href": "/automation"
+          },
+          {
+            "text": "Templates",
+            "href": "/templates"
+          },
+          {
+            "text": "AI Studio",
+            "href": "/ai-studio"
+          },
+          {
+            "text": "Analytics",
+            "href": "/analytics"
+          },
+          {
+            "text": "WhatsApp Connections",
+            "href": "/connections"
+          },
+          {
+            "text": "Settings",
+            "href": "/settings/workspace"
+          }
+        ],
+        "inputs": [
+          {
+            "name": "SELECT",
+            "type": "select",
+            "placeholder": ""
+          }
+        ],
+        "headings": [
+          "Analytics & Performance"
+        ]
+      }
+    },
+    {
+      "name": "12_connections",
+      "route": "http://localhost:3000/connections",
+      "title": "WhatsApp AI Automation",
+      "desktopScreenshot": "D:\\whatsapp-ai-automation-source\\docs\\screenshots\\12_connections_desktop.png",
+      "mobileScreenshot": "D:\\whatsapp-ai-automation-source\\docs\\screenshots\\12_connections_mobile.png",
+      "elements": {
+        "buttons": [
+          {
+            "text": "Close Sidebar",
+            "disabled": false,
+            "classes": "btn btn-link text-white-50 d-md-none p-0"
+          },
+          {
+            "text": "Toggle Navigation",
+            "disabled": false,
+            "classes": "btn btn-outline-secondary btn-sm d-md-none me-2"
+          },
+          {
+            "text": "AM\nAlex Mercer\nOWNER",
+            "disabled": false,
+            "classes": "btn btn-light border text-dark text-decoration-none py-1 px-3 rounded-pill"
+          },
+          {
+            "text": "Check Health",
+            "disabled": false,
+            "classes": "btn btn-outline-secondary btn-sm"
+          },
+          {
+            "text": "Connect WhatsApp Line",
+            "disabled": false,
+            "classes": "btn btn-success"
+          },
+          {
+            "text": "Button",
+            "disabled": false,
+            "classes": "btn btn-outline-secondary"
+          }
+        ],
+        "links": [
+          {
+            "text": "Overview",
+            "href": "/"
+          },
+          {
+            "text": "Shared Inbox",
+            "href": "/inbox"
+          },
+          {
+            "text": "Contacts CRM",
+            "href": "/contacts"
+          },
+          {
+            "text": "Audiences",
+            "href": "/audiences"
+          },
+          {
+            "text": "Campaigns",
+            "href": "/campaigns"
+          },
+          {
+            "text": "Automation",
+            "href": "/automation"
+          },
+          {
+            "text": "Templates",
+            "href": "/templates"
+          },
+          {
+            "text": "AI Studio",
+            "href": "/ai-studio"
+          },
+          {
+            "text": "Analytics",
+            "href": "/analytics"
+          },
+          {
+            "text": "WhatsApp Connections",
+            "href": "/connections"
+          },
+          {
+            "text": "Settings",
+            "href": "/settings/workspace"
+          }
+        ],
+        "inputs": [
+          {
+            "name": "INPUT",
+            "type": "text",
+            "placeholder": ""
+          }
+        ],
+        "headings": [
+          "WhatsApp Connections & Onboarding"
+        ]
+      }
+    },
+    {
+      "name": "13_settings_workspace",
+      "route": "http://localhost:3000/settings/workspace",
+      "title": "WhatsApp AI Automation",
+      "desktopScreenshot": "D:\\whatsapp-ai-automation-source\\docs\\screenshots\\13_settings_workspace_desktop.png",
+      "mobileScreenshot": "D:\\whatsapp-ai-automation-source\\docs\\screenshots\\13_settings_workspace_mobile.png",
+      "elements": {
+        "buttons": [
+          {
+            "text": "Close Sidebar",
+            "disabled": false,
+            "classes": "btn btn-link text-white-50 d-md-none p-0"
+          },
+          {
+            "text": "Toggle Navigation",
+            "disabled": false,
+            "classes": "btn btn-outline-secondary btn-sm d-md-none me-2"
+          },
+          {
+            "text": "AM\nAlex Mercer\nOWNER",
+            "disabled": false,
+            "classes": "btn btn-light border text-dark text-decoration-none py-1 px-3 rounded-pill"
           },
           {
             "text": "Button",
@@ -521,31 +1137,47 @@
         ],
         "links": [
           {
-            "text": "Dashboard",
+            "text": "Overview",
             "href": "/"
           },
           {
-            "text": "Inbox",
+            "text": "Shared Inbox",
             "href": "/inbox"
           },
           {
-            "text": "Contacts",
+            "text": "Contacts CRM",
             "href": "/contacts"
           },
           {
-            "text": "Workflows",
-            "href": "/workflows"
+            "text": "Audiences",
+            "href": "/audiences"
           },
           {
-            "text": "WhatsApp",
-            "href": "/settings/whatsapp"
+            "text": "Campaigns",
+            "href": "/campaigns"
           },
           {
-            "text": "Team",
-            "href": "/settings/team"
+            "text": "Automation",
+            "href": "/automation"
           },
           {
-            "text": "Workspace",
+            "text": "Templates",
+            "href": "/templates"
+          },
+          {
+            "text": "AI Studio",
+            "href": "/ai-studio"
+          },
+          {
+            "text": "Analytics",
+            "href": "/analytics"
+          },
+          {
+            "text": "WhatsApp Connections",
+            "href": "/connections"
+          },
+          {
+            "text": "Settings",
             "href": "/settings/workspace"
           }
         ],
@@ -602,11 +1234,11 @@
       }
     },
     {
-      "name": "09_settings_team",
+      "name": "14_settings_team",
       "route": "http://localhost:3000/settings/team",
       "title": "WhatsApp AI Automation",
-      "desktopScreenshot": "D:\\whatsapp-ai-automation-source\\docs\\screenshots\\09_settings_team_desktop.png",
-      "mobileScreenshot": "D:\\whatsapp-ai-automation-source\\docs\\screenshots\\09_settings_team_mobile.png",
+      "desktopScreenshot": "D:\\whatsapp-ai-automation-source\\docs\\screenshots\\14_settings_team_desktop.png",
+      "mobileScreenshot": "D:\\whatsapp-ai-automation-source\\docs\\screenshots\\14_settings_team_mobile.png",
       "elements": {
         "buttons": [
           {
@@ -622,7 +1254,7 @@
           {
             "text": "AM\nAlex Mercer\nOWNER",
             "disabled": false,
-            "classes": "btn btn-link text-dark text-decoration-none p-0"
+            "classes": "btn btn-light border text-dark text-decoration-none py-1 px-3 rounded-pill"
           },
           {
             "text": "Invite Member",
@@ -647,31 +1279,47 @@
         ],
         "links": [
           {
-            "text": "Dashboard",
+            "text": "Overview",
             "href": "/"
           },
           {
-            "text": "Inbox",
+            "text": "Shared Inbox",
             "href": "/inbox"
           },
           {
-            "text": "Contacts",
+            "text": "Contacts CRM",
             "href": "/contacts"
           },
           {
-            "text": "Workflows",
-            "href": "/workflows"
+            "text": "Audiences",
+            "href": "/audiences"
           },
           {
-            "text": "WhatsApp",
-            "href": "/settings/whatsapp"
+            "text": "Campaigns",
+            "href": "/campaigns"
           },
           {
-            "text": "Team",
-            "href": "/settings/team"
+            "text": "Automation",
+            "href": "/automation"
           },
           {
-            "text": "Workspace",
+            "text": "Templates",
+            "href": "/templates"
+          },
+          {
+            "text": "AI Studio",
+            "href": "/ai-studio"
+          },
+          {
+            "text": "Analytics",
+            "href": "/analytics"
+          },
+          {
+            "text": "WhatsApp Connections",
+            "href": "/connections"
+          },
+          {
+            "text": "Settings",
             "href": "/settings/workspace"
           }
         ],
@@ -682,6 +1330,26 @@
       }
     }
   ],
-  "consoleErrors": [],
-  "networkErrors": []
+  "consoleErrors": [
+    {
+      "url": "http://localhost:3000/audiences",
+      "text": "Failed to load resource: the server responded with a status of 400 (Bad Request)"
+    },
+    {
+      "url": "http://localhost:3000/audiences",
+      "text": "Failed to load resource: the server responded with a status of 400 (Bad Request)"
+    }
+  ],
+  "networkErrors": [
+    {
+      "url": "http://localhost:3000/api/v1/contacts?limit=200",
+      "status": 400,
+      "statusText": "Bad Request"
+    },
+    {
+      "url": "http://localhost:3000/api/v1/contacts?limit=200",
+      "status": 400,
+      "statusText": "Bad Request"
+    }
+  ]
 }

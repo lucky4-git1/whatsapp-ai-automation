@@ -9,7 +9,7 @@ export default function AudiencesPage() {
 
   const { data: contactsData } = useQuery({
     queryKey: ['contacts-audiences'],
-    queryFn: () => contactApi.list({ limit: 200 }),
+    queryFn: () => contactApi.list({ limit: 100 }),
   });
 
   const contacts = (contactsData?.data?.data as any[]) || [];
