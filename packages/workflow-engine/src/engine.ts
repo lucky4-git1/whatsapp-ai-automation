@@ -36,9 +36,9 @@ export class WorkflowEngine {
       data: {
         id: executionId,
         workflowId: workflow.id,
-        workspaceId: workflow.workspaceId,
+        version: (workflow as any).version || 1,
         status: 'RUNNING',
-        context: fullContext as any,
+        executionContext: fullContext as any,
       },
     });
 
@@ -79,7 +79,7 @@ export class WorkflowEngine {
           data: {
             executionId: context.executionId,
             nodeId: node.id,
-            nodeName: node.name,
+            nodeType: node.type,
             status: result.success ? 'COMPLETED' : 'FAILED',
             output: result.output as any,
             error: result.error,
@@ -107,7 +107,7 @@ export class WorkflowEngine {
         where: { id: context.executionId },
         data: {
           status: 'FAILED',
-          error: error.message,
+          errorMessage: error.message,
           completedAt: new Date(),
         },
       });

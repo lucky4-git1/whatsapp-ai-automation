@@ -15,6 +15,7 @@
     "type-check": "turbo run type-check",
     "db:migrate": "cd packages/database && npm run migrate",
     "db:generate": "cd packages/database && npm run generate",
+    "db:seed": "tsx packages/database/prisma/seed.ts",
     "db:studio": "cd packages/database && npm run studio",
     "clean": "turbo run clean && rm -rf node_modules"
   },

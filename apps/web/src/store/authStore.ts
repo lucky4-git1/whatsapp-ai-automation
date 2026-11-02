@@ -101,7 +101,14 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     try {
       const response = await authApi.me();
       if (response.data.success && response.data.data) {
-        set({ user: response.data.data.user, isLoading: false });
+        const user = response.data.data.user;
+        if (!localStorage.getItem('workspaceId') && user.memberships && user.memberships.length > 0) {
+          const defaultWorkspace = user.memberships.find((m: any) => m.workspaceId);
+          if (defaultWorkspace) {
+            localStorage.setItem('workspaceId', defaultWorkspace.workspaceId);
+          }
+        }
+        set({ user, isLoading: false });
       }
     } catch (error) {
       localStorage.removeItem('token');

@@ -1,6 +1,6 @@
 /**
  * Campaign Execution Worker
- * Handles bulk message campaigns
+ * Sends bulk messages with rate limiting
  */
 
 import { Job } from 'bullmq';
@@ -14,7 +14,7 @@ interface CampaignJobData {
 }
 
 export async function processCampaign(job: Job<CampaignJobData>) {
-  const { campaignId, batchSize = 50 } = job.data;
+  const { campaignId, batchSize = 100 } = job.data;
 
   try {
     logger.info({ jobId: job.id, campaignId }, 'Processing campaign');
@@ -23,15 +23,6 @@ export async function processCampaign(job: Job<CampaignJobData>) {
       where: { id: campaignId },
       include: {
         template: true,
-        segments: {
-          include: {
-            segment: {
-              include: {
-                filters: true,
-              },
-            },
-          },
-        },
       },
     });
 
@@ -44,13 +35,21 @@ export async function processCampaign(job: Job<CampaignJobData>) {
       return { skipped: true };
     }
 
+    const whatsappAccount = await prisma.whatsAppAccount.findFirst({
+      where: { workspaceId: campaign.workspaceId, isConnected: true },
+    });
+
+    if (!whatsappAccount) {
+      throw new Error('No connected WhatsApp account found for this workspace');
+    }
+
     // Update status to running
     await prisma.campaign.update({
       where: { id: campaignId },
       data: { status: 'RUNNING', startedAt: new Date() },
     });
 
-    // Get target contacts based on segments
+    // Get target contacts
     const contacts = await getTargetContacts(campaign);
 
     logger.info({ campaignId, totalContacts: contacts.length }, 'Retrieved target contacts');
@@ -70,7 +69,7 @@ export async function processCampaign(job: Job<CampaignJobData>) {
               where: {
                 workspaceId: campaign.workspaceId,
                 contactId: contact.id,
-                whatsappAccountId: campaign.whatsappAccountId,
+                whatsappAccountId: whatsappAccount.id,
               },
             });
 
@@ -79,9 +78,8 @@ export async function processCampaign(job: Job<CampaignJobData>) {
                 data: {
                   workspaceId: campaign.workspaceId,
                   contactId: contact.id,
-                  whatsappAccountId: campaign.whatsappAccountId!,
+                  whatsappAccountId: whatsappAccount.id,
                   status: 'OPEN',
-                  channel: 'WHATSAPP',
                 },
               });
             }
@@ -90,10 +88,11 @@ export async function processCampaign(job: Job<CampaignJobData>) {
             const message = await prisma.message.create({
               data: {
                 conversationId: conversation.id,
+                whatsappAccountId: whatsappAccount.id,
                 direction: 'OUTBOUND',
-                content: campaign.template?.body || campaign.message || '',
-                type: campaign.template ? 'TEMPLATE' : 'TEXT',
-                status: 'PENDING',
+                content: campaign.template?.name || campaign.name,
+                messageType: 'TEMPLATE',
+                status: 'QUEUED',
                 metadata: {
                   campaignId,
                   isCampaignMessage: true,
@@ -105,8 +104,8 @@ export async function processCampaign(job: Job<CampaignJobData>) {
             await messageSendingQueue.add('send-message', {
               messageId: message.id,
               conversationId: conversation.id,
-              content: campaign.template?.body || campaign.message || '',
-              type: campaign.template ? 'TEMPLATE' : 'TEXT',
+              content: campaign.template?.name || campaign.name,
+              type: 'TEMPLATE',
               templateData: campaign.template
                 ? {
                     name: campaign.template.name,
@@ -115,13 +114,13 @@ export async function processCampaign(job: Job<CampaignJobData>) {
                 : undefined,
             });
 
-            // Track campaign message
-            await prisma.campaignMessage.create({
+            // Track campaign recipient
+            await prisma.campaignRecipient.create({
               data: {
                 campaignId,
                 contactId: contact.id,
                 messageId: message.id,
-                status: 'QUEUED',
+                status: 'PENDING',
               },
             });
 
@@ -133,22 +132,13 @@ export async function processCampaign(job: Job<CampaignJobData>) {
         })
       );
 
-      // Update progress
-      await prisma.campaign.update({
-        where: { id: campaignId },
-        data: {
-          sentCount,
-          failedCount,
-        },
-      });
-
-      // Rate limiting delay between batches
+      // Rate limiting delay between batches (1 second)
       if (i + batchSize < contacts.length) {
         await new Promise((resolve) => setTimeout(resolve, 1000));
       }
     }
 
-    // Mark as completed
+    // Update campaign metrics
     await prisma.campaign.update({
       where: { id: campaignId },
       data: {
@@ -178,28 +168,10 @@ export async function processCampaign(job: Job<CampaignJobData>) {
 }
 
 async function getTargetContacts(campaign: any) {
-  // If specific segments, filter by those
-  if (campaign.segments && campaign.segments.length > 0) {
-    const segmentIds = campaign.segments.map((s: any) => s.segmentId);
-
-    return await prisma.contact.findMany({
-      where: {
-        workspaceId: campaign.workspaceId,
-        segments: {
-          some: {
-            segmentId: { in: segmentIds },
-          },
-        },
-        isActive: true,
-      },
-    });
-  }
-
-  // Otherwise, all contacts in workspace
   return await prisma.contact.findMany({
     where: {
       workspaceId: campaign.workspaceId,
-      isActive: true,
+      isUnsubscribed: false,
     },
   });
 }

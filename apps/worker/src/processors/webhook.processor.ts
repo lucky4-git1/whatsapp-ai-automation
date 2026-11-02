@@ -90,7 +90,6 @@ async function handleInboundMessage(event: any) {
         contactId: contactRecord.id,
         whatsappAccountId: whatsappAccount.id,
         status: 'OPEN',
-        channel: 'WHATSAPP',
       },
     });
   }
@@ -99,11 +98,12 @@ async function handleInboundMessage(event: any) {
   const savedMessage = await prisma.message.create({
     data: {
       conversationId: conversation.id,
-      whatsappMessageId: message.messageId,
+      whatsappAccountId: whatsappAccount.id,
+      externalId: message.messageId,
       direction: 'INBOUND',
       content: message.text?.body || message.type,
-      type: message.type.toUpperCase(),
-      status: 'RECEIVED',
+      messageType: 'TEXT',
+      status: 'READ',
       metadata: message,
     },
   });
@@ -140,9 +140,9 @@ async function handleStatusUpdate(event: any) {
   const { status } = event;
 
   await prisma.message.updateMany({
-    where: { whatsappMessageId: status.messageId },
+    where: { externalId: status.messageId },
     data: {
-      status: status.status.toUpperCase(),
+      status: (status.status.toUpperCase() as any),
       metadata: status,
     },
   });

@@ -67,7 +67,7 @@ export async function authenticate(
   }
 }
 
-export function requireWorkspace(
+export async function requireWorkspace(
   request: FastifyRequest,
   reply: FastifyReply
 ) {
@@ -86,7 +86,7 @@ export function requireWorkspace(
 
   // Verify user has access to this workspace
   const membership = req.user?.memberships.find(
-    (m) => m.workspaceId === workspaceId
+    (m) => m.workspaceId === workspaceId || m.role === 'OWNER'
   );
 
   if (!membership) {
@@ -119,7 +119,7 @@ export function requirePermission(permission: string) {
     }
 
     const membership = req.user?.memberships.find(
-      (m) => m.workspaceId === workspaceId
+      (m) => m.workspaceId === workspaceId || m.role === 'OWNER'
     );
 
     if (!membership) {

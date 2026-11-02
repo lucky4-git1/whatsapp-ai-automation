@@ -96,7 +96,6 @@ export class AIConversationService {
             select: {
               id: true,
               name: true,
-              preferences: true,
             },
           },
         },
@@ -111,7 +110,7 @@ export class AIConversationService {
       }
 
       const context = this.buildConversationContext(conversation, userMessage);
-      const customSystemPrompt = this.getWorkspaceSystemPrompt(conversation.workspace);
+      const customSystemPrompt = this.getWorkspaceSystemPrompt(conversation.workspace as any);
 
       const response = await this.aiEngine.generateResponse({
         context,
@@ -123,9 +122,11 @@ export class AIConversationService {
         await prisma.message.create({
           data: {
             conversationId,
+            whatsappAccountId: conversation.whatsappAccountId,
             content: response.message,
             direction: 'OUTBOUND',
-            status: 'PENDING',
+            messageType: 'TEXT',
+            status: 'QUEUED',
             metadata: {
               isAiGenerated: true,
               confidence: response.confidence,

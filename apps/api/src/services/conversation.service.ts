@@ -355,11 +355,11 @@ export class ConversationService {
     const message = await prisma.message.create({
       data: {
         conversationId,
+        whatsappAccountId: conversation.whatsappAccountId,
         direction: 'OUTBOUND',
         content,
-        type: type as any,
-        status: 'PENDING',
-        senderId,
+        messageType: (type as any) || 'TEXT',
+        status: 'QUEUED',
       },
     });
 

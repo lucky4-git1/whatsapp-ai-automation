@@ -23,7 +23,7 @@ export class AuthService {
     // Hash password
     const passwordHash = await bcrypt.hash(data.password, SALT_ROUNDS);
 
-    // Create user and default organization in a transaction
+    // Create user, default organization, default workspace, and membership in a transaction
     const user = await prisma.$transaction(async (tx: any) => {
       const newUser = await tx.user.create({
         data: {
@@ -35,7 +35,8 @@ export class AuthService {
       });
 
       // Create default organization
-      const orgSlug = generateSlug(`${data.firstName}-${data.lastName}-org`);
+      const uniqueSuffix = Math.random().toString(36).substring(2, 6);
+      const orgSlug = generateSlug(`${data.firstName}-${data.lastName}-org-${uniqueSuffix}`);
       const organization = await tx.organization.create({
         data: {
           name: `${data.firstName}'s Organization`,
@@ -44,11 +45,35 @@ export class AuthService {
         },
       });
 
-      // Create membership
+      // Create default workspace
+      const workspaceSlug = generateSlug(`${data.firstName}-workspace-${uniqueSuffix}`);
+      const workspace = await tx.workspace.create({
+        data: {
+          organizationId: organization.id,
+          name: `${data.firstName}'s Workspace`,
+          slug: workspaceSlug,
+          timezone: 'UTC',
+          defaultLanguage: 'en',
+        },
+      });
+
+      // Create default AI assistant configuration
+      await tx.assistantConfiguration.create({
+        data: {
+          workspaceId: workspace.id,
+          assistantName: 'AI Support Assistant',
+          businessDescription: `${data.firstName}'s business customer support`,
+          supportedLanguages: ['en'],
+          allowedCapabilities: ['knowledge_lookup', 'lead_capture'],
+        },
+      });
+
+      // Create membership linking user to organization AND workspace
       await tx.membership.create({
         data: {
           userId: newUser.id,
           organizationId: organization.id,
+          workspaceId: workspace.id,
           role: 'OWNER',
           isActive: true,
           joinedAt: new Date(),
@@ -107,6 +132,39 @@ export class AuthService {
       };
     }
 
+    // Auto-heal workspace if missing
+    let memberships = user.memberships;
+    const hasWorkspace = memberships.some((m: any) => m.workspaceId);
+    if (!hasWorkspace && memberships.length > 0) {
+      const orgId = memberships[0].organizationId;
+      let workspace = await prisma.workspace.findFirst({
+        where: { organizationId: orgId, isActive: true },
+      });
+      if (!workspace) {
+        const uniqueSuffix = Math.random().toString(36).substring(2, 6);
+        workspace = await prisma.workspace.create({
+          data: {
+            organizationId: orgId,
+            name: `${user.firstName}'s Workspace`,
+            slug: generateSlug(`${user.firstName}-workspace-${uniqueSuffix}`),
+            timezone: 'UTC',
+            defaultLanguage: 'en',
+          },
+        });
+      }
+      await prisma.membership.updateMany({
+        where: { userId: user.id, organizationId: orgId, workspaceId: null },
+        data: { workspaceId: workspace.id },
+      });
+      const reloaded = await prisma.membership.findMany({
+        where: { userId: user.id, isActive: true },
+        include: { organization: true, workspace: true },
+      });
+      if (reloaded.length > 0) {
+        memberships = reloaded;
+      }
+    }
+
     // Update last login
     await prisma.user.update({
       where: { id: user.id },
@@ -119,12 +177,12 @@ export class AuthService {
       firstName: user.firstName,
       lastName: user.lastName,
       emailVerified: user.emailVerified,
-      memberships: user.memberships.map((m: any) => ({
+      memberships: memberships.map((m: any) => ({
         organizationId: m.organizationId,
-        organizationName: m.organization.name,
-        organizationSlug: m.organization.slug,
+        organizationName: m.organization?.name || 'Default Organization',
+        organizationSlug: m.organization?.slug || 'default-org',
         workspaceId: m.workspaceId,
-        workspaceName: m.workspace?.name,
+        workspaceName: m.workspace?.name || 'Default Workspace',
         role: m.role,
       })),
     };

@@ -357,7 +357,7 @@ export class WhatsAppService {
         direction: 'INBOUND',
         messageType: message.type.toUpperCase() as any,
         content: message.text?.body || null,
-        metadata: message,
+        metadata: message as any,
         status: 'DELIVERED',
         deliveredAt: new Date(message.timestamp),
       },

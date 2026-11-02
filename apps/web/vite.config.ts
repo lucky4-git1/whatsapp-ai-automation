@@ -13,8 +13,12 @@ export default defineConfig({
     port: 3020,
     proxy: {
       '/api': {
-        target: process.env.VITE_API_URL || 'http://localhost:4000',
+        target: process.env.VITE_API_URL || 'http://localhost:4002',
         changeOrigin: true,
+      },
+      '/socket.io': {
+        target: process.env.VITE_WS_URL || 'http://localhost:4002',
+        ws: true,
       },
     },
   },

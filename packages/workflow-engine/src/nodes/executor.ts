@@ -106,13 +106,23 @@ export class NodeExecutor {
       throw new Error('No conversation context');
     }
 
+    const conv = await prisma.conversation.findUnique({
+      where: { id: context.conversationId },
+      select: { whatsappAccountId: true },
+    });
+
+    if (!conv) {
+      throw new Error('Conversation not found');
+    }
+
     const message = await prisma.message.create({
       data: {
         conversationId: context.conversationId,
+        whatsappAccountId: conv.whatsappAccountId,
         direction: 'OUTBOUND',
         content: this.interpolateVariables(content, context),
-        type: 'TEXT',
-        status: 'PENDING',
+        messageType: 'TEXT',
+        status: 'QUEUED',
         metadata: {
           workflowGenerated: true,
           workflowId: context.workflowId,
@@ -138,35 +148,25 @@ export class NodeExecutor {
       throw new Error('No contact context');
     }
 
-    // Find or create tag
-    let tag = await prisma.tag.findFirst({
+    // Upsert contact tag
+    const contactTag = await prisma.contactTag.upsert({
       where: {
-        workspaceId: context.metadata.workspaceId,
-        name: tagName,
-      },
-    });
-
-    if (!tag) {
-      tag = await prisma.tag.create({
-        data: {
-          workspaceId: context.metadata.workspaceId,
-          name: tagName,
+        contactId_tag: {
+          contactId: context.contactId,
+          tag: tagName,
         },
-      });
-    }
-
-    // Add to contact
-    await prisma.contactTag.create({
-      data: {
+      },
+      update: {},
+      create: {
         contactId: context.contactId,
-        tagId: tag.id,
+        tag: tagName,
       },
     });
 
     return {
       success: true,
       nodeId: node.id,
-      output: { tagId: tag.id },
+      output: { tagId: contactTag.id },
     };
   }
 
@@ -219,9 +219,9 @@ export class NodeExecutor {
       data: {
         workspaceId: context.metadata.workspaceId,
         contactId: context.contactId,
-        title: this.interpolateVariables(title, context),
-        value: value || 0,
-        stage: stage || 'NEW',
+        businessInterest: this.interpolateVariables(title, context),
+        score: value || 0,
+        stage: (stage as any) || 'NEW',
       },
     });
 

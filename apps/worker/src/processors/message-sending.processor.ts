@@ -119,9 +119,8 @@ export async function processMessageSending(job: Job<MessageSendingJobData>) {
     await prisma.message.update({
       where: { id: messageId },
       data: {
-        whatsappMessageId: response.messageId,
+        externalId: response.messageId,
         status: 'SENT',
-        sentAt: new Date(),
       },
     });
 

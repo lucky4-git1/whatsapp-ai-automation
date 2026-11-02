@@ -24,7 +24,7 @@ export async function processAI(job: Job<AIProcessingJobData>) {
     // Get conversation workspace
     const conversation = await prisma.conversation.findUnique({
       where: { id: conversationId },
-      select: { workspaceId: true, isAiEnabled: true },
+      select: { workspaceId: true, isAiEnabled: true, whatsappAccountId: true },
     });
 
     if (!conversation || !conversation.isAiEnabled) {
@@ -47,10 +47,11 @@ export async function processAI(job: Job<AIProcessingJobData>) {
     const outboundMessage = await prisma.message.create({
       data: {
         conversationId,
+        whatsappAccountId: conversation.whatsappAccountId,
         direction: 'OUTBOUND',
         content: aiResponse.message,
-        type: 'TEXT',
-        status: 'PENDING',
+        messageType: 'TEXT',
+        status: 'QUEUED',
         metadata: {
           isAiGenerated: true,
           confidence: aiResponse.confidence,
