@@ -1,4 +1,5 @@
 import { createServer } from 'vite';
+import http from 'http';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -19,13 +20,44 @@ async function start() {
     root: webRoot,
     configFile: path.join(webRoot, 'vite.config.ts'),
     server: {
-      port: 3020,
+      port: 3000,
       host: '0.0.0.0',
     },
   });
 
   await server.listen();
-  console.log(`Vite development server active at http://localhost:3020/`);
+  console.log(`Vite development server active at http://localhost:3000/`);
+
+  // Forwarder on port 3020 -> 3000
+  try {
+    const bridge = http.createServer((clientReq, clientRes) => {
+      const options = {
+        hostname: '127.0.0.1',
+        port: 3000,
+        path: clientReq.url,
+        method: clientReq.method,
+        headers: { ...clientReq.headers, host: 'localhost:3000' },
+      };
+
+      const proxyReq = http.request(options, (proxyRes) => {
+        clientRes.writeHead(proxyRes.statusCode, proxyRes.headers);
+        proxyRes.pipe(clientRes, { end: true });
+      });
+
+      proxyReq.on('error', () => {
+        clientRes.writeHead(502);
+        clientRes.end('Bad gateway');
+      });
+
+      clientReq.pipe(proxyReq, { end: true });
+    });
+
+    bridge.listen(3020, '0.0.0.0', () => {
+      console.log(`Port 3020 alias forwarder active -> http://localhost:3000/`);
+    });
+  } catch (err) {
+    console.log('Bridge port 3020 skipped:', err.message);
+  }
 
   // Explicitly prevent Node event loop from exiting
   setInterval(() => {}, 1000 * 60 * 60);

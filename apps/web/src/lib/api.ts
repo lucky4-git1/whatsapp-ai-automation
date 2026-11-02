@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+// When VITE_API_URL is omitted or empty, relative requests go through Vite's /api proxy
+const API_URL = import.meta.env.VITE_API_URL || '';
 
 export const api = axios.create({
   baseURL: API_URL,
@@ -33,9 +34,13 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      localStorage.removeItem('token');
-      localStorage.removeItem('user');
-      window.location.href = '/login';
+      const url = error.config?.url || '';
+      // Do not redirect on login or register endpoints - let UI handle the error toast
+      if (!url.includes('/auth/login') && !url.includes('/auth/register')) {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        window.location.href = '/login';
+      }
     }
     return Promise.reject(error);
   }
