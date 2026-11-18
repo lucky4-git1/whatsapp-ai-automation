@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { contactApi } from '../../lib/api';
-import { Link } from 'react-router-dom';
+import { contactApi, conversationApi } from '../../lib/api';
+import { Link, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import CreateContactModal from '../../components/contacts/CreateContactModal';
 import ImportWizardModal from '../../components/contacts/ImportWizardModal';
 
 export default function ContactsPage() {
+  const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showImportModal, setShowImportModal] = useState(false);
@@ -16,6 +17,20 @@ export default function ContactsPage() {
     page: 1,
     limit: 20,
   });
+
+  const handleStartChat = async (contactId: string) => {
+    try {
+      const res = await conversationApi.start(contactId);
+      const convId = res.data?.data?.conversation?.id;
+      if (convId) {
+        navigate(`/inbox?conversation=${convId}`);
+      } else {
+        navigate('/inbox');
+      }
+    } catch {
+      toast.error('Failed to open chat');
+    }
+  };
 
   const { data: contacts, isLoading } = useQuery({
     queryKey: ['contacts', filters],
@@ -247,6 +262,13 @@ export default function ContactsPage() {
                           </td>
                           <td className="text-end">
                             <div className="btn-group btn-group-sm">
+                              <button
+                                className="btn btn-outline-success"
+                                title="Chat on WhatsApp"
+                                onClick={() => handleStartChat(contact.id)}
+                              >
+                                <i className="fab fa-whatsapp"></i>
+                              </button>
                               <Link
                                 to={`/contacts/${contact.id}`}
                                 className="btn btn-outline-primary"

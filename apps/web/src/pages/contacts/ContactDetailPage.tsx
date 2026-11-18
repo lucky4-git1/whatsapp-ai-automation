@@ -1,15 +1,37 @@
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { contactApi } from '../../lib/api';
+import { contactApi, conversationApi } from '../../lib/api';
+import { useState } from 'react';
+import toast from 'react-hot-toast';
 
 export default function ContactDetailPage() {
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
+  const [isStartingChat, setIsStartingChat] = useState(false);
 
   const { data: contact, isLoading } = useQuery({
     queryKey: ['contact', id],
     queryFn: () => contactApi.get(id!),
     enabled: !!id,
   });
+
+  const handleStartChat = async () => {
+    if (!id) return;
+    try {
+      setIsStartingChat(true);
+      const res = await conversationApi.start(id);
+      const convId = res.data?.data?.conversation?.id;
+      if (convId) {
+        navigate(`/inbox?conversation=${convId}`);
+      } else {
+        navigate('/inbox');
+      }
+    } catch {
+      toast.error('Failed to open WhatsApp conversation');
+    } finally {
+      setIsStartingChat(false);
+    }
+  };
 
   if (isLoading) {
     return (
@@ -35,10 +57,16 @@ export default function ContactDetailPage() {
             {contactData?.name || contactData?.phoneNumber}
           </h2>
         </div>
-        <button className="btn btn-primary">
-          <i className="fas fa-edit me-2"></i>
-          Edit Contact
-        </button>
+        <div className="d-flex gap-2">
+          <button
+            className="btn btn-success"
+            onClick={handleStartChat}
+            disabled={isStartingChat}
+          >
+            <i className="fab fa-whatsapp me-2"></i>
+            {isStartingChat ? 'Opening Chat...' : 'Chat on WhatsApp'}
+          </button>
+        </div>
       </div>
 
       <div className="row g-4">

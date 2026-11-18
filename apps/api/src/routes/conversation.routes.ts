@@ -1,5 +1,6 @@
 import { FastifyInstance } from 'fastify';
 import { z } from 'zod';
+import { prisma } from '@whatsapp-automation/database';
 import { conversationService } from '../services/conversation.service';
 import {
   conversationFilterSchema,
@@ -14,7 +15,7 @@ import {
   requirePermission,
   AuthenticatedRequest,
 } from '../middleware/auth.middleware';
-import { PERMISSIONS } from '@whatsapp-automation/shared';
+import { PERMISSIONS, ERROR_CODES } from '@whatsapp-automation/shared';
 
 export async function conversationRoutes(server: FastifyInstance) {
   // All routes require authentication and workspace context
@@ -142,6 +143,61 @@ export async function conversationRoutes(server: FastifyInstance) {
       return reply.status(201).send({
         success: true,
         data: { note },
+      });
+    }
+  );
+
+  // Start or get existing conversation for a contact
+  server.post(
+    '/start',
+    { preHandler: [requirePermission(PERMISSIONS.CONVERSATION_REPLY)] },
+    async (request: AuthenticatedRequest, reply) => {
+      const { contactId } = request.body as { contactId: string };
+      const workspaceId = request.workspaceId!;
+
+      const contact = await prisma.contact.findFirst({
+        where: { id: contactId, workspaceId },
+      });
+
+      if (!contact) {
+        return reply.status(404).send({
+          success: false,
+          error: { code: ERROR_CODES.NOT_FOUND, message: 'Contact not found' },
+        });
+      }
+
+      let conv = await prisma.conversation.findFirst({
+        where: { workspaceId, contactId },
+      });
+
+      if (!conv) {
+        const account = await prisma.whatsAppAccount.findFirst({
+          where: { isConnected: true },
+        });
+
+        if (!account) {
+          return reply.status(400).send({
+            success: false,
+            error: { code: ERROR_CODES.WHATSAPP_NOT_CONNECTED, message: 'No active WhatsApp account connected' },
+          });
+        }
+
+        conv = await prisma.conversation.create({
+          data: {
+            workspaceId,
+            contactId,
+            whatsappAccountId: account.id,
+            status: 'OPEN',
+            priority: 'NORMAL',
+            isAiEnabled: true,
+            lastMessageAt: new Date(),
+          },
+        });
+      }
+
+      return reply.send({
+        success: true,
+        data: { conversation: conv },
       });
     }
   );

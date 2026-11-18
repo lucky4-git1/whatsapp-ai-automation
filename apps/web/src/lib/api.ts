@@ -157,6 +157,9 @@ export const conversationApi = {
   list: (params?: any) =>
     api.get<ApiResponse>('/api/v1/conversations', { params }),
 
+  start: (contactId: string) =>
+    api.post<ApiResponse>('/api/v1/conversations/start', { contactId }),
+
   get: (id: string) => api.get<ApiResponse>(`/api/v1/conversations/${id}`),
 
   updateStatus: (id: string, status: string) =>
