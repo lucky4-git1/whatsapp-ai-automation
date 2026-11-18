@@ -75,27 +75,37 @@ export async function createServer() {
   });
 
   // Global error handler
-  server.setErrorHandler((error, request, reply) => {
-    if (error instanceof ZodError) {
+  server.setErrorHandler((error: any, request, reply) => {
+    if (error instanceof ZodError || error.name === 'ZodError') {
       return reply.status(400).send({
         success: false,
         error: {
           code: ERROR_CODES.VALIDATION_ERROR,
-          message: 'Validation failed',
+          message: error.errors?.[0]?.message || 'Validation failed',
           details: error.errors,
         },
       });
     }
 
-    // Don't expose internal errors in production
-    const isDevelopment = process.env.NODE_ENV === 'development';
-    
+    // Pass through client errors (4xx) with their descriptive message
+    if (error.statusCode && error.statusCode < 500) {
+      return reply.status(error.statusCode).send({
+        success: false,
+        error: {
+          code: error.code || ERROR_CODES.VALIDATION_ERROR,
+          message: error.message,
+        },
+      });
+    }
+
     request.log.error(error);
 
+    // 5xx Server Errors
+    const isDevelopment = process.env.NODE_ENV === 'development';
     return reply.status(error.statusCode || 500).send({
       success: false,
       error: {
-        code: (error as any).code || ERROR_CODES.INTERNAL_ERROR,
+        code: error.code || ERROR_CODES.INTERNAL_ERROR,
         message: isDevelopment ? error.message : 'Internal server error',
         details: isDevelopment ? error.stack : undefined,
       },
