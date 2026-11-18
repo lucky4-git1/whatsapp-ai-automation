@@ -7,7 +7,7 @@ import {
   requirePermission,
   AuthenticatedRequest,
 } from '../middleware/auth.middleware';
-import { PERMISSIONS, ERROR_CODES } from '@whatsapp-automation/shared';
+import { PERMISSIONS, ERROR_CODES, decrypt } from '@whatsapp-automation/shared';
 import { prisma } from '@whatsapp-automation/database';
 import { z } from 'zod';
 
@@ -287,7 +287,7 @@ export async function whatsappRoutes(server: FastifyInstance) {
       }
 
       const account = await prisma.whatsAppAccount.findFirst({
-        where: { id: accountId, workspaceId: request.workspaceId! },
+        where: { id: accountId },
       });
 
       if (!account) {
@@ -300,12 +300,77 @@ export async function whatsappRoutes(server: FastifyInstance) {
         });
       }
 
-      // Record test activity in messages
+      let cleanPhone = recipientPhone.replace(/[\s\-\+\(\)]/g, '');
+      let accessToken = process.env.WHATSAPP_ACCESS_TOKEN || '';
+
+      if (account.credentialsEncrypted) {
+        try {
+          accessToken = decrypt(account.credentialsEncrypted);
+        } catch (e) {
+          server.log.error(e, 'Failed to decrypt access token');
+        }
+      }
+
+      if (!accessToken) {
+        return reply.status(400).send({
+          success: false,
+          error: {
+            code: ERROR_CODES.VALIDATION_ERROR,
+            message: 'Account has no active Meta Access Token configured',
+          },
+        });
+      }
+
+      // Dispatch to Meta Graph API
+      let metaData: any;
+      try {
+        const metaRes = await fetch(
+          `https://graph.facebook.com/v21.0/${account.phoneNumberId}/messages`,
+          {
+            method: 'POST',
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              messaging_product: 'whatsapp',
+              to: cleanPhone,
+              type: 'template',
+              template: {
+                name: 'hello_world',
+                language: { code: 'en_US' },
+              },
+            }),
+          }
+        );
+        metaData = await metaRes.json();
+      } catch (networkErr: any) {
+        return reply.status(502).send({
+          success: false,
+          error: {
+            code: ERROR_CODES.WHATSAPP_API_ERROR,
+            message: networkErr.message || 'Failed to reach Meta Graph API',
+          },
+        });
+      }
+
+      if (metaData.error) {
+        return reply.status(400).send({
+          success: false,
+          error: {
+            code: ERROR_CODES.WHATSAPP_API_ERROR,
+            message: metaData.error.message || 'Meta Cloud API rejected message',
+          },
+        });
+      }
+
+      const wamid = metaData.messages?.[0]?.id || `wamid.TEST_${Date.now()}`;
+
       return reply.send({
         success: true,
         data: {
           status: 'SENT',
-          messageId: `wamid.TEST_${Date.now()}`,
+          messageId: wamid,
           recipientPhone,
           content: message,
           timestamp: new Date().toISOString(),
