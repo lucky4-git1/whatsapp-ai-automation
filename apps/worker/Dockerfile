@@ -2,23 +2,29 @@
 FROM node:20-slim AS base
 
 WORKDIR /app
-RUN apt-get update && apt-get install -y openssl ca-certificates && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y openssl ca-certificates python3 make g++ && rm -rf /var/lib/apt/lists/*
 
 # Stage 1: Build
 FROM base AS builder
 WORKDIR /app
 
-COPY package.json package-lock.json turbo.json ./
-COPY packages ./packages
-COPY apps/worker ./apps/worker
+# Copy complete monorepo source
+COPY . .
 
-RUN npm ci --include=dev
+# Clean install all dependencies
+RUN npm ci
+
+# Generate Prisma Client
 RUN npm run db:generate
-RUN npx turbo run build --filter=@whatsapp-automation/worker...
+
+# Build all monorepo packages
+RUN npm run build
 
 # Stage 2: Production Runner
-FROM base AS runner
+FROM node:20-slim AS runner
 WORKDIR /app
+
+RUN apt-get update && apt-get install -y openssl ca-certificates && rm -rf /var/lib/apt/lists/*
 
 ENV NODE_ENV=production
 
