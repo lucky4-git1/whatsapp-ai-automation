@@ -14,6 +14,7 @@
     "lint": "turbo run lint",
     "type-check": "turbo run type-check",
     "db:migrate": "cd packages/database && npm run migrate",
+    "db:push": "cd packages/database && npm run db:push",
     "db:generate": "cd packages/database && npm run generate",
     "db:seed": "tsx packages/database/prisma/seed.ts",
     "db:studio": "cd packages/database && npm run studio",

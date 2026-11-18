@@ -4,7 +4,7 @@ import { logger } from '@whatsapp-automation/observability';
 import { prisma } from '@whatsapp-automation/database';
 import { aiConversationService } from './services/ai-conversation.service';
 
-const PORT = parseInt(process.env.API_PORT || '4000', 10);
+const PORT = parseInt(process.env.PORT || process.env.API_PORT || '4000', 10);
 const HOST = process.env.HOST || '0.0.0.0';
 
 async function start() {

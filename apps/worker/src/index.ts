@@ -15,8 +15,10 @@ import { processMessageSending } from './processors/message-sending.processor';
 import { processAI } from './processors/ai-processing.processor';
 import { processCampaign } from './processors/campaign.processor';
 
-const connection = new IORedis(process.env.REDIS_URL || 'redis://localhost:6379', {
+const redisUrl = process.env.REDIS_URL || 'redis://localhost:6379';
+const connection = new IORedis(redisUrl, {
   maxRetriesPerRequest: null,
+  ...(redisUrl.startsWith('rediss://') ? { tls: { rejectUnauthorized: false } } : {}),
 });
 
 const workers: Worker[] = [];

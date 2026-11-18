@@ -7,8 +7,10 @@ import { Queue } from 'bullmq';
 import IORedis from 'ioredis';
 import { logger } from '@whatsapp-automation/observability';
 
-const connection = new IORedis(process.env.REDIS_URL || 'redis://localhost:6379', {
+const redisUrl = process.env.REDIS_URL || 'redis://localhost:6379';
+const connection = new IORedis(redisUrl, {
   maxRetriesPerRequest: null,
+  ...(redisUrl.startsWith('rediss://') ? { tls: { rejectUnauthorized: false } } : {}),
 });
 
 // Queue names

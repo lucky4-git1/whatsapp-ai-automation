@@ -33,8 +33,25 @@ export async function createServer() {
     contentSecurityPolicy: false,
   });
 
+  const corsOriginEnv = process.env.CORS_ORIGIN || 'http://localhost:3000,http://localhost:3020';
+  const allowedOrigins = corsOriginEnv.split(',').map((o) => o.trim());
+
   await server.register(cors, {
-    origin: process.env.CORS_ORIGIN || 'http://localhost:3000',
+    origin: (origin, cb) => {
+      // Allow requests with no origin (e.g. mobile apps, curl, Meta webhooks)
+      if (!origin) return cb(null, true);
+      
+      const isAllowed =
+        allowedOrigins.includes(origin) ||
+        allowedOrigins.includes('*') ||
+        /\.vercel\.app$/.test(new URL(origin).hostname) ||
+        /\.northflank\.app$/.test(new URL(origin).hostname);
+
+      if (isAllowed) {
+        return cb(null, true);
+      }
+      return cb(null, false);
+    },
     credentials: true,
   });
 
