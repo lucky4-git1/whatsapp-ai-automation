@@ -5,6 +5,10 @@
   "framework": "vite",
   "rewrites": [
     {
+      "source": "/api/:match*",
+      "destination": "https://p01--whatsapp-ai-automation--4f6rv5zqlbpc.code.run/api/:match*"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }

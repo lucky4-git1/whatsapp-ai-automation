@@ -1,7 +1,9 @@
 import axios from 'axios';
 
-// When VITE_API_URL is omitted or empty, relative requests go through Vite's /api proxy
-const API_URL = import.meta.env.VITE_API_URL || '';
+// When VITE_API_URL is omitted, use the production Northflank backend in production or relative proxy in dev
+const API_URL =
+  import.meta.env.VITE_API_URL ||
+  (import.meta.env.PROD ? 'https://p01--whatsapp-ai-automation--4f6rv5zqlbpc.code.run' : '');
 
 export const api = axios.create({
   baseURL: API_URL,
