@@ -133,9 +133,14 @@ export async function whatsappRoutes(server: FastifyInstance) {
     }
   });
 
-  // Protected routes - require authentication and workspace
-  server.addHook('preHandler', authenticate);
-  server.addHook('preHandler', requireWorkspace);
+  // Protected routes - require authentication and workspace (skip public webhook endpoints)
+  server.addHook('preHandler', async (request: any, reply) => {
+    if (request.url.includes('/webhook')) {
+      return;
+    }
+    await authenticate(request, reply);
+    await requireWorkspace(request, reply);
+  });
 
   // Connect WhatsApp account
   server.post(
