@@ -29,7 +29,7 @@ export default function AIStudioPage() {
   const generateCopyMutation = useMutation({
     mutationFn: (data: any) => aiApi.generateCopy(data),
     onSuccess: (res: any) => {
-      setGeneratedCopy(res.data?.data?.copy || '');
+      setGeneratedCopy(res.data?.data?.copy || res.data?.data?.variants?.[0]?.text || '');
       toast.success('Promotional copy generated');
     },
     onError: (err: any) => {
